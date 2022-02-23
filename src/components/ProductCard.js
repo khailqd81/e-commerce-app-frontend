@@ -1,4 +1,3 @@
-import { useLayoutEffect } from "react";
 import "../index.css"
 import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 function ProductCard(props) {

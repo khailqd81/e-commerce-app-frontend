@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { NavLink, Link } from "react-router-dom"
 import { SiAzurefunctions } from "react-icons/si";
 import { VscAccount } from "react-icons/vsc";
 import { BsSearch } from "react-icons/bs";
@@ -8,15 +8,19 @@ import { AiOutlineLaptop } from "react-icons/ai"
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
 import "../index.css"
+import TypeContext from '../store/TypeContext';
+import { useContext } from "react";
+import { actions } from "../store";
 function Header() {
+    const [state, dispatch] = useContext(TypeContext);
     return (
         <div>
             <div className="w-full bg-green-600">
                 <nav className="flex h-[50px] max-w-screen-xl  items-center text-white justify-between p-[14px] mx-auto">
-                    <div className="flex items-center cursor-pointer">
+                    <Link to="/" onClick={()=>{dispatch(actions.setType("Điện thoại"))}} className="flex items-center cursor-pointer">
                         <SiAzurefunctions size={40} />
                         <p className="text-xl font-bold ml-[8px]">PaTiKa</p>
-                    </div>
+                    </Link>
                     <div className="hidden sm:flex items-center bg-white px-[10px] py-[6px] rounded">
                         <input className="outline-none text-black placeholder-gray-400 min-w-[360px] pr-20" placeholder="Nhập tên sản phẩm cần tìm ..." type="text" />
                         <BsSearch className="text-gray-400" size={20}/>
@@ -38,28 +42,44 @@ function Header() {
                 <div className="flex max-w-screen-xl items-center text-white mx-auto px-[14px]">
                     <ul className="flex">
                         <li>
-                            <Link to="/dien-thoai" className="flex items-center mr-4 hover:bg-green-500 p-2">
+                            <NavLink 
+                                to="/dien-thoai" 
+                                onClick={()=>{dispatch(actions.setType("Điện thoại"))}} 
+                                className={({ isActive }) => 
+                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
                                 <GiSmartphone size={20}/>
                                 <span className="ml-1">Điện thoại</span>
-                            </Link>
+                            </NavLink>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center mr-4 hover:bg-green-500 p-2">
+                            <NavLink 
+                                to="/tablet" 
+                                onClick={()=>{dispatch(actions.setType("Tablet"))}} 
+                                className={({ isActive }) => 
+                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
                                 <AiOutlineTablet size={20}/>
                                 <span className="ml-1">Tablet</span>
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center mr-4 hover:bg-green-500 p-2">
+                            <NavLink 
+                                to="/laptop"
+                                onClick={()=>{dispatch(actions.setType("Laptop"))}} 
+                                className={({ isActive }) => 
+                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
                                 <AiOutlineLaptop size={20}/>
                                 <span className="ml-1">Laptop</span>
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center mr-4 hover:bg-green-500 p-2">
+                            <NavLink 
+                                to="/dong-ho-thong-minh" 
+                                onClick={()=>{dispatch(actions.setType("Đồng hồ thông minh"))}} 
+                                className={({ isActive }) => 
+                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
                                 <BsSmartwatch size={20}/>
                                 <span className="ml-1">Đồng hồ thông minh</span>
-                            </a>
+                            </NavLink>
                         </li>
 
                     </ul>
