@@ -1,12 +1,11 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ListProduct from "../components/ListProduct";
-function Home() {
+function Home(props) {
     return (
-        <div >
-            <Header/>
-            <ListProduct/>
-            <Footer/>
+        <div>
+            <ListProduct categoryName={props.categoryName}/>
         </div>
     )
 }

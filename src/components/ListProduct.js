@@ -1,45 +1,43 @@
+import axios from "axios";
+import { useEffect, useState } from "react"
 import ProductCard from "./ProductCard"
-const FakeProducts = [
-    {
-        name: "Samsung S8",
-        price: "2000000"
-    },
-    {
-        name: "Samsung A30",
-        price: "20000000"
-    },
-    {
-        name: "Oppo V3",
-        price: "2000"
-    },
-    {
-        name: "Xiaomi Bang 6",
-        price: "4000"
-    },
-    {
-        name: "Samsung S8",
-        price: "7000"
-    },
-    {
-        name: "Samsung S8",
-        price: "1000000"
-    },
-    {
-        name: "Samsung S8",
-        price: "1000000"
-    },
-    {
-        name: "Samsung S8",
-        price: "1000000"
-    },
-]
-function ListProduct() {
+
+function ListProduct(props) {
+    const [Products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const config = {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            headers: {
+              'Content-Type': 'application/json'
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          }
+        let api = `${process.env.REACT_APP_BACKEND_API}/products`;
+        fetch(api, {
+            method: 'POST', // or 'PUT'
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                categoryName: "Điện thoại"
+            }),
+          })
+            .then(response => response.json())
+            .then(data => {
+                setProducts(data);
+            })
+    }, []);
+
     return (
         <div className="flex flex-wrap max-w-screen-xl mx-auto my-[20px] ">
             {
-                FakeProducts.map((product, index) => {
+                Products.map((product, index) => {
                     return (
-                        <ProductCard key={index} name={product.name} price={product.price}/>
+                        <ProductCard key={index} name={product.product_name} image_url={product.image_url} price={product.price} />
                     )
                 })
             }

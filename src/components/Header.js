@@ -7,6 +7,7 @@ import { AiOutlineTablet } from "react-icons/ai"
 import { AiOutlineLaptop } from "react-icons/ai"
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
+import "../index.css"
 function Header() {
     return (
         <div>
@@ -21,12 +22,12 @@ function Header() {
                         <BsSearch className="text-gray-400" size={20}/>
                     </div>
                     <div className="flex items-center ">
-                        <a className="flex items-center mr-[16px] cursor-pointer">
+                        <a className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
                             <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
                             Giỏ hàng
                         </a>
-                        <a className="flex items-center cursor-pointer">
-                            <VscAccount size={25} className="mr-[8px] text-white font-bold" />
+                        <a className="nav-item flex items-center cursor-pointer hover:text-neutral-200">
+                            <VscAccount size={25} className="mr-[8px] text-white" />
                             Thông tin tài khoản
                         </a>
                     </div>
@@ -34,28 +35,28 @@ function Header() {
             </div>
 
             <div className="w-full bg-green-400">
-                <div className="flex max-w-screen-xl items-center text-white mx-auto px-[14px] py-2">
+                <div className="flex max-w-screen-xl items-center text-white mx-auto px-[14px]">
                     <ul className="flex">
                         <li>
-                            <a href="#" className="flex items-center mr-4">
+                            <Link to="/dien-thoai" className="flex items-center mr-4 hover:bg-green-500 p-2">
                                 <GiSmartphone size={20}/>
                                 <span className="ml-1">Điện thoại</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center mr-4">
+                            <a href="#" className="flex items-center mr-4 hover:bg-green-500 p-2">
                                 <AiOutlineTablet size={20}/>
                                 <span className="ml-1">Tablet</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center mr-4">
+                            <a href="#" className="flex items-center mr-4 hover:bg-green-500 p-2">
                                 <AiOutlineLaptop size={20}/>
                                 <span className="ml-1">Laptop</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center mr-4">
+                            <a href="#" className="flex items-center mr-4 hover:bg-green-500 p-2">
                                 <BsSmartwatch size={20}/>
                                 <span className="ml-1">Đồng hồ thông minh</span>
                             </a>
