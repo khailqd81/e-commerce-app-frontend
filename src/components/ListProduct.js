@@ -1,32 +1,37 @@
 import { useEffect, useState, useContext } from "react"
+import { useLocation } from "react-router-dom";
+
 import ProductCard from "./ProductCard"
 import TypeContext from "../store/TypeContext";
-function ListProduct(props) {
+
+function ListProduct() {
     const [Products, setProducts] = useState([]);
-    const [state, dispatch] = useContext(TypeContext);
-    //const [type, setType] = useState("Điện thoại");
+    const [state, ] = useContext(TypeContext);
+    const location = useLocation();
+    let category = state.type;
+    if (location.pathname !== "/" && state.type !== localStorage.getItem("category")) {
+        category = localStorage.getItem("category");
+    }    
     useEffect(() => {
         let api = `${process.env.REACT_APP_BACKEND_API}/products`;
-        console.log("Type: ",state.type);
-        if (state.type !== "All") {
+        if (category !== "All") {
             api = api + `/type`;
         }
-        console.log(api);
         fetch(api, {
             method: 'POST',
             mode: 'cors',
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                categoryName: state.type
+                categoryName: category
             }),
-          })
+        })
             .then(response => response.json())
             .then(data => {
                 setProducts(data);
             })
-    }, [state.type]);
+    }, [category]);
 
     let listClassName = `flex flex-wrap max-w-screen-xl mx-auto my-[20px]`;
     if (Products.length === 0) {
@@ -36,12 +41,19 @@ function ListProduct(props) {
         <div className={listClassName}>
             {
                 Products.length !== 0 ?
-                Products.map((product, index) => {
-                    return (
-                        <ProductCard key={index} name={product.product_name} image_url={product.image_url} price={product.price} />
-                    )
-                })
-                :<p className="text-red-500 font-semibold py-4">Không có sản phẩm nào thuộc danh mục này</p>
+                    Products.map((product, index) => {
+                        return (
+                            <ProductCard
+                                key={index}
+                                product={product}
+                                // name={product.product_name}
+                                // image_url={product.image_url}
+                                // price={product.price}
+                                // type={state.type}
+                            />
+                        )
+                    })
+                    : <p className="text-red-500 font-semibold py-4">Không có sản phẩm nào thuộc danh mục này</p>
             }
         </div>
     )

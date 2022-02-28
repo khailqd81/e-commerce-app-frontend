@@ -6,18 +6,37 @@ import App from './App';
 import Home from './pages/Home';
 import reportWebVitals from './reportWebVitals';
 import TypeProvider from './store/TypeProvider';
+import ListProduct from './components/ListProduct';
+import ProductDetail from './components/ProductDetail';
+import ProductCart from './components/ProductCart';
 ReactDOM.render(
   <React.StrictMode>
     <TypeProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} >
-            <Route path="dien-thoai" element={<Home />} />
-            <Route path="laptop" element={<Home />} />
-            <Route path="tablet" element={<Home />} />
-            <Route path="dong-ho-thong-minh" element={<Home />} />
-            <Route index element={<Home />} />
-            <Route path="*" element={<Home />}/>
+            <Route path="dien-thoai" element={<Home />} >
+              <Route path=":phoneid" element={<ProductDetail />} />
+              <Route index element={<ListProduct />} />
+            </Route>
+            <Route path="laptop" element={<Home />} >
+              <Route path=":laptopid" element={<ProductDetail />} />
+              <Route index element={<ListProduct />} />
+            </Route>
+            <Route path="tablet" element={<Home />} >
+              <Route path=":tabletid" element={<ProductDetail />} />
+              <Route index element={<ListProduct />} />
+            </Route>
+            <Route path="dong-ho-thong-minh" element={<Home />} >
+              <Route path=":smartwatchid" element={<ProductDetail />} />
+              <Route index element={<ListProduct />} />
+            </Route>
+            <Route path="cart" element={<ProductCart/>} />
+            <Route index element={<ListProduct />} />
+            <Route path="*" element={<Home />} >
+              <Route path=":itemid" element={<ProductDetail />} />
+              <Route index element={<ListProduct />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

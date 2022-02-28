@@ -1,7 +1,11 @@
-import ListProduct from "../components/ListProduct";
+import { Outlet } from "react-router-dom";
+// import ListProduct from "../components/ListProduct";
 function Home(props) {
     return (
-        <ListProduct categoryName={props.categoryName} />
+        <div>
+            <Outlet/>
+            {/* <ListProduct categoryName={props.categoryName} /> */}
+        </div>
     )
 }
 
