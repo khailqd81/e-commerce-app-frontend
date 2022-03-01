@@ -5,9 +5,7 @@ import ProductCart from "./components/ProductCart";
 function App() {
   return (
       <div className="font-roboto">
-        <Header />
         <Outlet/>
-        <Footer />
       </div>
   )
 }

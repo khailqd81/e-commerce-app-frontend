@@ -1,9 +1,13 @@
 import { Outlet } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 // import ListProduct from "../components/ListProduct";
 function Home(props) {
     return (
         <div>
-            <Outlet/>
+            <Header />
+            <Outlet />
+            <Footer />
             {/* <ListProduct categoryName={props.categoryName} /> */}
         </div>
     )

@@ -4,6 +4,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import './index.css';
 import App from './App';
 import Home from './pages/Home';
+import UserLogin from './pages/UserLogin';
 import reportWebVitals from './reportWebVitals';
 import TypeProvider from './store/TypeProvider';
 import ListProduct from './components/ListProduct';
@@ -15,6 +16,7 @@ ReactDOM.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} >
+            <Route path="login" element={<UserLogin/>}/>
             <Route path="dien-thoai" element={<Home />} >
               <Route path=":phoneid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
@@ -32,7 +34,7 @@ ReactDOM.render(
               <Route index element={<ListProduct />} />
             </Route>
             <Route path="cart" element={<ProductCart/>} />
-            <Route index element={<ListProduct />} />
+            {/* <Route index element={<ListProduct />} /> */}
             <Route path="*" element={<Home />} >
               <Route path=":itemid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />

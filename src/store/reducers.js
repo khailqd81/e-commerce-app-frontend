@@ -7,12 +7,13 @@ const initialState = {
 function reducer(state, action) {
     switch (action.type) {
         case SET_TYPE:
-            localStorage.setItem("category",action.payload);
+            localStorage.setItem("category", action.payload);
             return {
                 ...state,
                 type: action.payload
             }
         case SET_PRODUCT:
+            localStorage.setItem("productId", action.payload.product_id);
             return {
                 ...state,
                 product: { ...action.payload }

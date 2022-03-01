@@ -1,12 +1,28 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useStore } from "../store";
 
 import InputAmount from "./InputAmount";
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 function ProductDetail() {
     const [amount, setAmount] = useState(1);
-    const [state,] = useStore();
-    const product = state.product;
+    const [state, ] = useStore();
+    const [product, setProduct]= useState(state.product);
+
+
+    useLayoutEffect(() => {
+        if (Object.keys(product).length === 0) {
+            console.log("Empty product")
+            const productId = localStorage.getItem("productId");
+            console.log(productId);
+            let api = `${process.env.REACT_APP_BACKEND_API}/products/id?productId=${productId}`;
+            console.log("api:",api);
+            fetch(api)
+                .then(response => response.json())
+                .then(data => {
+                    setProduct(data);
+                })
+        }
+    }, [product]);
 
     var formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -26,10 +42,10 @@ function ProductDetail() {
 
     return (
         <div className="flex m-8 shadow-xl px-4 py-8 rounded">
-            <div>
-                <img src={product.image_url} className="min-w-[600px] border-r" alt={product.product_name} />
+            <div className="flex-[2]">
+                <img src={product.image_url} className="max-w-full max-h-full border-r" alt={product.product_name} />
             </div>
-            <div className="flex flex-col pl-4">
+            <div className="flex flex-col flex-[3] pl-4">
                 <p className="text-3xl">{product.product_name}</p>
                 <div className="flex text-gray-500">
                     <p className="mr-4">Số lượng: {product.quantity}</p>
