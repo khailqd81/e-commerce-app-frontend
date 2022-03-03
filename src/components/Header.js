@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom"
+import { NavLink, Link, useNavigate } from "react-router-dom"
 import { SiAzurefunctions } from "react-icons/si";
 import { VscAccount } from "react-icons/vsc";
 import { BsSearch } from "react-icons/bs";
@@ -13,8 +13,15 @@ import TypeContext from '../store/TypeContext';
 import { actions } from "../store";
 
 function Header() {
-    const [, dispatch] = useContext(TypeContext);
+    const [state, dispatch] = useContext(TypeContext);
     const [searchInput, setSearchInput] = useState("");
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        dispatch(actions.setLogin(false));
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        navigate("/");
+    }
     return (
         <div>
             <div className="w-full bg-green-600">
@@ -34,16 +41,42 @@ function Header() {
                         />
                         <BsSearch className="text-gray-400" size={20} />
                     </div>
-                    <div className="flex items-center ">
-                        <Link to="/signup" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
-                            <RiGlobalLine size={30} className="mr-[8px] text-white" />
-                            Đăng ký
-                        </Link>
-                        <Link to="/login" className="nav-item flex items-center cursor-pointer hover:text-neutral-200">
-                            <RiLoginBoxLine size={25} className="mr-[8px] text-white" />
-                            Đăng nhập
-                        </Link>
-                        {/* <Link to="/cart" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
+
+                    {state.isLogin ?
+                        (<div className="flex items-center ">
+                            <Link to="/cart" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
+                                <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
+                                Giỏ hàng
+                            </Link>
+                            <div className="relative nav-item flex items-center cursor-divointer hover:text-neutral-200">
+                                <VscAccount size={25} className="mr-[8px] text-white" />
+                                Thông tin tài khoản
+                                <ul className="absolute top-full bg-white left-0 shadow-2xl rounded z-10">
+                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Lịch sử mua hàng</Link></li>
+                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Thông tin tài khoản</Link></li>
+                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
+                                </ul>
+                            </div>
+                        </div>)
+                        : (<div className="flex items-center ">
+                            <Link to="/signup" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
+                                <RiGlobalLine size={30} className="mr-[8px] text-white" />
+                                Đăng ký
+                            </Link>
+                            <Link to="/login" className="nav-item flex items-center cursor-pointer hover:text-neutral-200">
+                                <RiLoginBoxLine size={25} className="mr-[8px] text-white" />
+                                Đăng nhập
+                            </Link>
+                        </div>)}
+                    {/* <Link to="/signup" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
+                        <RiGlobalLine size={30} className="mr-[8px] text-white" />
+                        Đăng ký
+                    </Link>
+                    <Link to="/login" className="nav-item flex items-center cursor-pointer hover:text-neutral-200">
+                        <RiLoginBoxLine size={25} className="mr-[8px] text-white" />
+                        Đăng nhập
+                    </Link> */}
+                    {/* <Link to="/cart" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
                             <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
                             Giỏ hàng
                         </Link>
@@ -51,7 +84,6 @@ function Header() {
                             <VscAccount size={25} className="mr-[8px] text-white" />
                             Thông tin tài khoản
                         </Link> */}
-                    </div>
                 </nav>
             </div>
 

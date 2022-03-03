@@ -1,4 +1,4 @@
-import {SET_TYPE, SET_PRODUCT} from "./constants"
+import {SET_TYPE, SET_PRODUCT, SET_LOGIN} from "./constants"
 export const setType = payload => {
     return {
         type: SET_TYPE,
@@ -9,6 +9,13 @@ export const setType = payload => {
 export const setProduct = payload => {
     return {
         type: SET_PRODUCT,
+        payload
+    }
+}
+
+export const setLogin = payload => {
+    return {
+        type: SET_LOGIN,
         payload
     }
 }

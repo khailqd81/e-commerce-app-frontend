@@ -1,7 +1,8 @@
-import { SET_TYPE, SET_PRODUCT } from "./constants"
+import { SET_TYPE, SET_PRODUCT, SET_LOGIN } from "./constants"
 const initialState = {
     type: "Điện thoại",
-    product: {}
+    product: {},
+    isLogin: false
 }
 
 function reducer(state, action) {
@@ -17,6 +18,11 @@ function reducer(state, action) {
             return {
                 ...state,
                 product: { ...action.payload }
+            }
+        case SET_LOGIN:
+            return {
+                ...state,
+                isLogin: action.payload
             }
         default:
             return state;
