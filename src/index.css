@@ -25,3 +25,7 @@ code {
   -webkit-line-clamp: 1;
   overflow: hidden;
 }
+
+.account-item:hover ul {
+  display: block
+}

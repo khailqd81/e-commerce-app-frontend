@@ -36,7 +36,7 @@ function App() {
         dispatch(actions.setLogin(true));
       }
     }
-
+    checkIsLogin();
   }, []);
   console.log("login state: ", state.isLogin);
   return (

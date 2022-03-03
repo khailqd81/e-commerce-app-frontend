@@ -48,10 +48,10 @@ function Header() {
                                 <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
                                 Giỏ hàng
                             </Link>
-                            <div className="relative nav-item flex items-center cursor-divointer hover:text-neutral-200">
+                            <div className="relative account-item nav-item flex items-center cursor-divointer hover:text-neutral-200">
                                 <VscAccount size={25} className="mr-[8px] text-white" />
                                 Thông tin tài khoản
-                                <ul className="absolute top-full bg-white left-0 shadow-2xl rounded z-10">
+                                <ul className="hidden absolute top-full bg-white left-0 shadow-2xl rounded z-10">
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Lịch sử mua hàng</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Thông tin tài khoản</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>

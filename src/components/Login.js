@@ -8,6 +8,7 @@ import { useStore, actions } from "../store"
 
 function Login({ onClick }) {
     const [state, dispatch] = useStore();
+    const [message, setMessage] = useState("");
     const [inputs, setInputs] = useState(["", ""]);
     const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ function Login({ onClick }) {
                     // cookies.set('refreshToken', data.refreshToken, { path: '/' });
                     navigate("/");
                 }
-
+                setMessage(response.data.message)
             })
     }
 
@@ -69,6 +70,9 @@ function Login({ onClick }) {
                     type="password"
                 />
             </div>
+            {
+                message.length !== 0 ? <p className="mt-8 w-full text-red-700 text-center py-3 bg-red-100 border-red-700 border rounded-md">{message}</p> : <p></p>
+            }
             <p className="mt-8 w-full text-gray-400">Bạn chưa có tài khoản <span className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={onClick}>Đăng ký ngay</span></p>
             <button className="mt-8 bg-green-500 hover:bg-green-400 p-3 w-full text-white rounded-lg" type="submit">Đăng nhập</button>
         </form>

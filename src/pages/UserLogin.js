@@ -4,8 +4,11 @@ import Signup from "../components/Signup";
 function UserLogin(props) {
     const [isFormLogin, setIsFormLogin] = useState(true);
     useLayoutEffect(() => {
-        if (props) {
+        if (props.signup) {
             setIsFormLogin(false)
+        }
+        if (props.signin) {
+            setIsFormLogin(true)
         }
     }, [])
 
