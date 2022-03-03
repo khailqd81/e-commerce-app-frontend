@@ -29,3 +29,12 @@ code {
 .account-item:hover ul {
   display: block
 }
+
+.account-item__list::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 10px;
+  top: -6px;
+  opacity: 0;
+}

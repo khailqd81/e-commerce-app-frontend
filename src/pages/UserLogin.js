@@ -3,12 +3,10 @@ import Login from "../components/Login";
 import Signup from "../components/Signup";
 function UserLogin(props) {
     const [isFormLogin, setIsFormLogin] = useState(true);
+    
     useLayoutEffect(() => {
         if (props.signup) {
             setIsFormLogin(false)
-        }
-        if (props.signin) {
-            setIsFormLogin(true)
         }
     }, [])
 

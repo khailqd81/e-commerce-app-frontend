@@ -35,8 +35,13 @@ function Login({ onClick }) {
                     // cookies.set('accessToken', data.accessToken, { path: '/' });
                     // cookies.set('refreshToken', data.refreshToken, { path: '/' });
                     navigate("/");
+                } 
+                else {
+                    setMessage(response.data.message)
                 }
-                setMessage(response.data.message)
+            })
+            .catch(error => {
+                console.log(error)
             })
     }
 

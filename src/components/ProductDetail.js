@@ -32,6 +32,7 @@ function ProductDetail() {
     const handleDecrease = () => {
         setAmount(prevState => prevState - 1)
     }
+    
     const handleIncrease = () => {
         setAmount(prevState => prevState + 1)
     }

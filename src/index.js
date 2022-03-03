@@ -10,15 +10,24 @@ import TypeProvider from './store/TypeProvider';
 import ListProduct from './components/ListProduct';
 import ProductDetail from './components/ProductDetail';
 import ProductCart from './components/ProductCart';
+const arrRoutes = ["dien-thoai", "laptop","tablet","dong-ho-thong-minh"];
 ReactDOM.render(
   <React.StrictMode>
     <TypeProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} >
-            <Route path="login" element={<UserLogin signin/>}/>
-            <Route path="signup" element={<UserLogin signup/>}/>
-            <Route path="dien-thoai" element={<Home />} >
+            <Route path="login" element={<UserLogin signin />} />
+            <Route path="signup" element={<UserLogin signup />} />
+            {arrRoutes.map((item) => {
+              return (
+                <Route path={item} element={<Home />} key={item}>
+                  <Route path=":productid" element={<ProductDetail />} />
+                  <Route index element={<ListProduct />} />
+                </Route>
+              )
+            })}
+            {/* <Route path="dien-thoai" element={<Home />} >
               <Route path=":phoneid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
             </Route>
@@ -33,8 +42,11 @@ ReactDOM.render(
             <Route path="dong-ho-thong-minh" element={<Home />} >
               <Route path=":smartwatchid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
+            </Route> */}
+            <Route path="cart" element={<Home/>} >
+              <Route path=":productid" element={<ProductDetail />} />
+              <Route index element={<ProductCart />} />
             </Route>
-            <Route path="cart" element={<ProductCart/>} />
             {/* <Route index element={<ListProduct />} /> */}
             <Route path="*" element={<Home />} >
               <Route path=":itemid" element={<ProductDetail />} />
