@@ -22,7 +22,7 @@ export const setLogin = payload => {
 
 export const setProductInCart = payload => {
     return {
-        type: SET_LOGIN,
+        type: SET_PRODUCT_IN_CART,
         payload
     }
 }

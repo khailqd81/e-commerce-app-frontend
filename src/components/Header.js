@@ -6,12 +6,13 @@ import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart } from "react-i
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
 import { RiLoginBoxLine, RiGlobalLine } from "react-icons/ri"
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 import "../index.css"
 import TypeContext from '../store/TypeContext';
 import { actions } from "../store";
-
+import isLogin from "../utils/isLogin";
 function Header() {
     const [state, dispatch] = useContext(TypeContext);
     const [searchInput, setSearchInput] = useState("");
@@ -22,6 +23,21 @@ function Header() {
         localStorage.removeItem("refreshToken");
         navigate("/");
     }
+    useEffect(() => {
+        async function getCart() {
+            const authorization = await isLogin();
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/cart`, {
+                headers: {
+                    authorization: authorization
+                }
+            });
+            if (response.status === 200) {
+                dispatch(actions.setProductInCart(response.data.products.length));
+            }
+        }
+        getCart();
+    },[state.productInCart])
+
     return (
         <div>
             <div className="w-full bg-green-600">
@@ -45,8 +61,8 @@ function Header() {
                     {state.isLogin ?
                         (<div className="flex items-center ">
                             <Link to="/cart" className="relative nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
-                                <AiOutlineShoppingCart size={30} className="mr-[8px] text-white"/>
-                                <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%]">0</span>
+                                <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
+                                <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%] border">{state.productInCart}</span>
                                 Giỏ hàng
                             </Link>
                             <div className="relative account-item nav-item flex items-center cursor-divointer hover:text-neutral-200">

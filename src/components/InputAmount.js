@@ -1,4 +1,4 @@
-function InputAmount({styleContainer, amount,onIncrease, onDecrease, onChange, quantity, index }) {
+function InputAmount({ styleContainer, amount, onIncrease, onDecrease, onChange, quantity, index }) {
     const isOnlyDigits = (value) => {
         var er = /^-?[0-9]+$/;
         return er.test(value);
@@ -21,7 +21,7 @@ function InputAmount({styleContainer, amount,onIncrease, onDecrease, onChange, q
                     if (isOnlyDigits(e.target.value)
                         && Number.isInteger(inputValue)
                         && inputValue <= quantity) {
-                        onChange(index, inputValue)
+                        onChange(index = 0, inputValue)
                     }
                 }} />
             <button

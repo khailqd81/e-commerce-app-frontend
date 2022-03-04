@@ -1,13 +1,16 @@
+import axios from "axios";
 import { useLayoutEffect, useState } from "react";
-import { useStore } from "../store";
+import { useNavigate } from "react-router-dom";
+import { useStore,actions } from "../store";
+import isLogin from "../utils/isLogin";
 
 import InputAmount from "./InputAmount";
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 function ProductDetail() {
     const [amount, setAmount] = useState(1);
-    const [state, ] = useStore();
-    const [product, setProduct]= useState(state.product);
-
+    const [state, dispatch] = useStore();
+    const [product, setProduct] = useState(state.product);
+    const navigate = useNavigate();
 
     useLayoutEffect(() => {
         if (Object.keys(product).length === 0) {
@@ -15,12 +18,14 @@ function ProductDetail() {
             const productId = localStorage.getItem("productId");
             console.log(productId);
             let api = `${process.env.REACT_APP_BACKEND_API}/products/id?productId=${productId}`;
-            console.log("api:",api);
+            console.log("api:", api);
             fetch(api)
                 .then(response => response.json())
                 .then(data => {
                     setProduct(data);
                 })
+        } else {
+            navigate("/")
         }
     }, [product]);
 
@@ -32,13 +37,39 @@ function ProductDetail() {
     const handleDecrease = () => {
         setAmount(prevState => prevState - 1)
     }
-    
+
     const handleIncrease = () => {
         setAmount(prevState => prevState + 1)
     }
 
-    const handleOnInputChange = (value) => {
+    const handleOnInputChange = (index, value) => {
         setAmount(value)
+    }
+
+    const handleAddToCart = async (productId) => {
+        const authorization = await isLogin();
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/cart/add`, {
+            product_id: product.product_id,
+            amount: amount,
+        }, {
+            headers: {
+                authorization: authorization
+            },
+        })
+        console.log(response.data);
+        if (response.status === 200) {
+            const newResponse = await axios.get(`${process.env.REACT_APP_BACKEND_API}/cart`, {
+                headers: {
+                    authorization: authorization
+                }
+            });
+            if (newResponse.status === 200) {
+                dispatch(actions.setProductInCart(newResponse.data.products.length));
+            console.log("Ok")
+            }
+        } else {
+            console.log("Not ok")
+        }
     }
 
     return (
@@ -92,7 +123,12 @@ function ProductDetail() {
                         </button>
                     </div> */}
                 </div>
-                <button className="bg-green-600 hover:bg-green-500 py-4 px-6 text-white rounded-md mt-auto max-w-[200px]">Thêm vào giỏ hàng</button>
+                <button
+                    className="bg-green-600 hover:bg-green-500 py-4 px-6 text-white rounded-md mt-auto max-w-[200px]"
+                    onClick={() => handleAddToCart(product.product_id)}
+                >
+                    Thêm vào giỏ hàng
+                </button>
             </div>
 
 
