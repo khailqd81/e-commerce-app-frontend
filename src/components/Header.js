@@ -1,4 +1,3 @@
-import { NavLink, Link, useNavigate } from "react-router-dom"
 import { SiAzurefunctions } from "react-icons/si";
 import { VscAccount } from "react-icons/vsc";
 import { BsSearch } from "react-icons/bs";
@@ -6,16 +5,18 @@ import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart } from "react-i
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
 import { RiLoginBoxLine, RiGlobalLine } from "react-icons/ri"
-import { useContext, useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
+
 import axios from "axios";
+import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom"
 
 import "../index.css"
-import TypeContext from '../store/TypeContext';
-import { actions } from "../store";
+import { useStore, actions } from "../store";
 import isLogin from "../utils/isLogin";
 function Header() {
-    const [state, dispatch] = useContext(TypeContext);
-    const [searchInput, setSearchInput] = useState("");
+    const [state, dispatch] = useStore();
+    // const [searchInput, setSearchInput] = useState("");
+    let [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const handleLogout = () => {
         dispatch(actions.setLogin(false));
@@ -23,7 +24,8 @@ function Header() {
         localStorage.removeItem("refreshToken");
         navigate("/");
     }
-    useEffect(() => {
+
+    useLayoutEffect(() => {
         async function getCart() {
             const authorization = await isLogin();
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/cart`, {
@@ -36,8 +38,24 @@ function Header() {
             }
         }
         getCart();
-    },[state.productInCart])
+    },[state.productInCart, dispatch])
 
+    const handleOnSearchChange = (e) => {
+        let search = e.target.value;
+        if (search) {
+            setSearchParams({search})
+        }
+        else {
+            setSearchParams({});
+        }
+    }
+
+    const handleSearch = (e) => {
+        if (e.key === "Enter") {
+            const search = searchParams.get("search");
+            console.log(search);
+        }
+    }
     return (
         <div>
             <div className="w-full bg-green-600">
@@ -51,9 +69,9 @@ function Header() {
                             className="outline-none text-black placeholder-gray-400 min-w-[360px] pr-20"
                             placeholder="Nhập tên sản phẩm cần tìm ..."
                             type="text"
-                            value={searchInput}
-                            onChange={(e) => setSearchInput(e.target.value)}
-
+                            value={searchParams.get("search") || ""}
+                            onChange={handleOnSearchChange}
+                            onKeyUp={handleSearch}
                         />
                         <BsSearch className="text-gray-400" size={20} />
                     </div>

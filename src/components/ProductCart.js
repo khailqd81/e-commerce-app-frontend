@@ -1,14 +1,13 @@
 import InputAmount from "./InputAmount"
-import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 import { useState, useLayoutEffect } from "react"
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import  isLogin  from "../utils/isLogin"
+import isLogin from "../utils/isLogin"
+import { useStore, actions } from "../store"
 function ProductCart() {
     // const [amounts, setAmounts] = useState([1, 1]);
     const [products, setProducts] = useState([])
-    const navigate = useNavigate();
+    const [state, dispatch] = useStore();
     // const products = [
     //     {
     //         product_name: "Samsung A52",
@@ -58,7 +57,6 @@ function ProductCart() {
             //     }
             //   }
             if (response.status === 200) {
-                console.log(response.data.products);
                 setProducts(response.data.products);
             }
             else {
@@ -77,7 +75,7 @@ function ProductCart() {
     const handleDecrease = async (index) => {
         const newAmount = products[index].amount - 1;
         const authorization = await isLogin();
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/cart/update`, {
+        const response = await axios.patch(`${process.env.REACT_APP_BACKEND_API}/cart/update`, {
             product_id: products[index].product_id,
             amount: newAmount,
         }, {
@@ -92,7 +90,7 @@ function ProductCart() {
     const handleIncrease = async (index) => {
         const newAmount = products[index].amount + 1;
         const authorization = await isLogin();
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/cart/update`, {
+        const response = await axios.patch(`${process.env.REACT_APP_BACKEND_API}/cart/update`, {
             product_id: products[index].product_id,
             amount: newAmount,
         }, {
@@ -108,7 +106,7 @@ function ProductCart() {
     const handleOnInputChange = async (index, value) => {
         const newAmount = value;
         const authorization = await isLogin();
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/cart/update`, {
+        const response = await axios.patch(`${process.env.REACT_APP_BACKEND_API}/cart/update`, {
             product_id: products[index].product_id,
             amount: newAmount,
         }, {
@@ -117,6 +115,23 @@ function ProductCart() {
             },
         })
         if (response.status === 200) {
+            setProducts(response.data.products);
+        }
+    }
+
+    const handleRemoveFromCart = async (product_id) => {
+        const authorization = await isLogin();
+
+        const response = await axios.delete(`${process.env.REACT_APP_BACKEND_API}/cart/remove`, {
+            product_id: product_id
+        },
+            {
+                headers: {
+                    authorization: authorization
+                },
+            })
+        if (response.status === 200) {
+            dispatch(actions.setProductInCart(response.data.products.length))
             setProducts(response.data.products);
         }
     }
@@ -162,7 +177,9 @@ function ProductCart() {
                                             />
                                         </td>
                                         <td className="text-right text-red-500 font-semibold pr-20">{formatter.format(product.price * product.amount)}</td>
-                                        <td className="text-center">Xóa</td>
+                                        <td className="text-center">
+                                            <button className="hover:text-gray-500 p-3" onClick={() => handleRemoveFromCart(product.product_id)}>Xóa</button>
+                                        </td>
                                     </tr>
                                 )
                             })}

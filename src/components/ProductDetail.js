@@ -1,16 +1,20 @@
 import axios from "axios";
-import { useLayoutEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useStore,actions } from "../store";
+import { useLayoutEffect, useState, useEffect } from "react";
+import { useStore, actions } from "../store";
 import isLogin from "../utils/isLogin";
-
+import { AiOutlineCheckCircle } from "react-icons/ai"
+import { ImCross } from "react-icons/im"
 import InputAmount from "./InputAmount";
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 function ProductDetail() {
     const [amount, setAmount] = useState(1);
     const [state, dispatch] = useStore();
+    const [showBox, setShowBox] = useState({
+        check: false,
+        response: false,
+        message: ""
+    });
     const [product, setProduct] = useState(state.product);
-    const navigate = useNavigate();
 
     useLayoutEffect(() => {
         if (Object.keys(product).length === 0) {
@@ -24,10 +28,23 @@ function ProductDetail() {
                 .then(data => {
                     setProduct(data);
                 })
-        } else {
-            navigate("/")
         }
     }, [product]);
+
+    useEffect(() => {
+        let timerID;
+        if (showBox.check) {
+            timerID = setTimeout(() => {
+                setShowBox(prevState => ({
+                    check: false,
+                    message: ""
+                }));
+            }, 3000)
+        }
+
+        return () => { clearTimeout(timerID) };
+    }, [showBox.check])
+
 
     var formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -58,6 +75,7 @@ function ProductDetail() {
         })
         console.log(response.data);
         if (response.status === 200) {
+
             const newResponse = await axios.get(`${process.env.REACT_APP_BACKEND_API}/cart`, {
                 headers: {
                     authorization: authorization
@@ -65,9 +83,19 @@ function ProductDetail() {
             });
             if (newResponse.status === 200) {
                 dispatch(actions.setProductInCart(newResponse.data.products.length));
-            console.log("Ok")
+                setShowBox({
+                    check: true,
+                    response: true,
+                    message: "Sản phẩm đã được thêm vào giỏ hàng."
+                });
+                console.log("Ok")
             }
         } else {
+            setShowBox({
+                check: true,
+                response: false,
+                message: response.data.message
+            });
             console.log("Not ok")
         }
     }
@@ -124,13 +152,26 @@ function ProductDetail() {
                     </div> */}
                 </div>
                 <button
-                    className="bg-green-600 hover:bg-green-500 py-4 px-6 text-white rounded-md mt-auto max-w-[200px]"
+                    className="bg-green-600 hover:bg-green-500 py-4 px-6 text-white rounded-md mt-auto max-w-[200px] outline-none border-none"
                     onClick={() => handleAddToCart(product.product_id)}
                 >
                     Thêm vào giỏ hàng
                 </button>
             </div>
-
+            {showBox.check ?
+                showBox.response ?
+                    <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
+                        <AiOutlineCheckCircle size={60} className="text-green-500 text-bold" />
+                        <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
+                    </div>
+                    : 
+                    <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
+                        <ImCross size={60} className="text-red-500 text-bold" />
+                        <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
+                    </div>
+                : 
+                <div></div>
+            }
 
         </div>
     )
