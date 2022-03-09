@@ -1,30 +1,21 @@
 import InputAmount from "./InputAmount"
-import { useState, useLayoutEffect } from "react"
+import { useState, useLayoutEffect, useEffect } from "react"
 import axios from "axios";
 
+import { AiOutlineCheckCircle } from "react-icons/ai"
+import { ImCross } from "react-icons/im"
+
 import isLogin from "../utils/isLogin"
+import moneyFormatter from "../utils/moneyFormat"
 import { useStore, actions } from "../store"
 function ProductCart() {
-    // const [amounts, setAmounts] = useState([1, 1]);
-    const [products, setProducts] = useState([])
-    const [state, dispatch] = useStore();
-    // const products = [
-    //     {
-    //         product_name: "Samsung A52",
-    //         product_id: "1",
-    //         price: "1000000",
-    //         image_url: samsung,
-    //         quantity: 25
-    //     },
-    //     {
-    //         product_name: "Samsung S8",
-    //         product_id: "2",
-    //         price: "10000000",
-    //         image_url: samsung,
-    //         quantity: 15
-
-    //     }
-    // ]
+    const [products, setProducts] = useState([]);
+    const [showBox, setShowBox] = useState({
+        check: false,
+        response: false,
+        message: ""
+    });
+    const [, dispatch] = useStore();
 
     useLayoutEffect(() => {
         async function getCart() {
@@ -57,20 +48,34 @@ function ProductCart() {
             //     }
             //   }
             if (response.status === 200) {
+                console.log(response.data.products)
                 setProducts(response.data.products);
             }
             else {
-                console.log(response.data);
                 setProducts([])
             }
         }
         getCart();
     }, [])
 
-    var formatter = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-    });
+    useEffect(() => {
+        let timerID;
+        if (showBox.check) {
+            timerID = setTimeout(() => {
+                setShowBox({
+                    check: false,
+                    response: false,
+                    message: ""
+                });
+            }, 3000)
+        }
+
+        return () => { clearTimeout(timerID) };
+    }, [showBox.check])
+    // var formatter = new Intl.NumberFormat('vi-VN', {
+    //     style: 'currency',
+    //     currency: 'VND',
+    // });
 
     const handleDecrease = async (index) => {
         const newAmount = products[index].amount - 1;
@@ -136,6 +141,42 @@ function ProductCart() {
         }
     }
 
+    const handleAddOrder = async () => {
+        const productToDb = products.map((product) => {
+            return {
+                product_id: product.product_id,
+                amount: product.amount,
+                priced: product.price
+            }
+        })
+        const authorization = await isLogin();
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/order/add`,
+            {
+                products: productToDb
+            },
+            {
+                headers: {
+                    authorization
+                }
+            })
+        if (response.status === 200) {
+            dispatch(actions.setProductInCart(0))
+            setProducts([])
+            setShowBox({
+                check: true,
+                response: true,
+                message: response.data.message
+            })
+        } else {
+            setShowBox({
+                check: true,
+                response: false,
+                message: response.data.message
+            })
+        }
+
+    }
+
     const totalPayment = products.length === 0 ? 0 : products.reduce((total, product, index) => {
         return total + parseFloat(product.price * product.amount);
     }, 0);
@@ -164,7 +205,7 @@ function ProductCart() {
                                                 <span className="ml-8 self-center">{product.product_name}</span>
                                             </div>
                                         </td>
-                                        <td className="text-center">{formatter.format(product.price)}</td>
+                                        <td className="text-center">{moneyFormatter.format(product.price)}</td>
                                         <td className="text-center">
                                             <InputAmount
                                                 styleContainer={"flex justify-center"}
@@ -176,7 +217,7 @@ function ProductCart() {
                                                 index={index}
                                             />
                                         </td>
-                                        <td className="text-right text-red-500 font-semibold pr-20">{formatter.format(product.price * product.amount)}</td>
+                                        <td className="text-right text-red-500 font-semibold pr-20">{moneyFormatter.format(product.price * product.amount)}</td>
                                         <td className="text-center">
                                             <button className="hover:text-gray-500 p-3" onClick={() => handleRemoveFromCart(product.product_id)}>Xóa</button>
                                         </td>
@@ -186,13 +227,26 @@ function ProductCart() {
                         </tbody>
                     </table>
                     <div className="flex justify-end">
-                        <p className="text-lg self-center">Tổng thanh toán: <span className="text-red-500 font-semibold">{formatter.format(totalPayment)}</span></p>
-                        <button className="border bg-green-500 hover:bg-green-400 px-16 py-2 ml-4 rounded text-white">Mua hàng</button>
+                        <p className="text-lg self-center">Tổng thanh toán: <span className="text-red-500 font-semibold">{moneyFormatter.format(totalPayment)}</span></p>
+                        <button className="border bg-green-500 hover:bg-green-400 px-16 py-2 ml-4 rounded text-white" onClick={handleAddOrder}>Mua hàng</button>
                     </div>
                 </div>
-                : <p className="text-red-500 font-semibold py-4 text-center">Không có sản phẩm nào trong giỏ hàng</p>}
+                : <p className="text-red-500 font-semibold py-4 text-center min-h-[400px]">Không có sản phẩm nào trong giỏ hàng</p>}
 
-
+            {showBox.check ?
+                showBox.response ?
+                    <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
+                        <AiOutlineCheckCircle size={60} className="text-green-500 text-bold" />
+                        <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
+                    </div>
+                    :
+                    <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
+                        <ImCross size={60} className="text-red-500 text-bold" />
+                        <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
+                    </div>
+                :
+                <div></div>
+            }
         </div>
     )
 }

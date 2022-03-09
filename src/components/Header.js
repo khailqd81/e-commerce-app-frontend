@@ -87,7 +87,7 @@ function Header() {
                                 <VscAccount size={25} className="mr-[8px] text-white" />
                                 Thông tin tài khoản
                                 <ul className="account-item__list hidden absolute top-[calc(100%+6px)] bg-white left-0 shadow-2xl rounded z-10">
-                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Lịch sử mua hàng</Link></li>
+                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/order">Lịch sử mua hàng</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Thông tin tài khoản</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
                                 </ul>

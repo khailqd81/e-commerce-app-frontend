@@ -10,6 +10,7 @@ import TypeProvider from './store/TypeProvider';
 import ListProduct from './components/ListProduct';
 import ProductDetail from './components/ProductDetail';
 import ProductCart from './components/ProductCart';
+import Order from './components/Order';
 const arrRoutes = ["dien-thoai", "laptop","tablet","dong-ho-thong-minh"];
 ReactDOM.render(
   <React.StrictMode>
@@ -46,6 +47,9 @@ ReactDOM.render(
             <Route path="cart" element={<Home/>} >
               <Route path=":productid" element={<ProductDetail />} />
               <Route index element={<ProductCart />} />
+            </Route>
+            <Route path="order" element={<Home/>} >
+              <Route index element={<Order />} />
             </Route>
             {/* <Route index element={<ListProduct />} /> */}
             <Route path="*" element={<Home />} >

@@ -12,12 +12,15 @@ async function isLogin() {
     if (response.status !== 200) {
         const refreshToken = localStorage.getItem("refreshToken");
         const token = await axios.get(`${process.env.REACT_APP_BACKEND_API}/refresh-token`, {
-            refreshToken
+            headers: {
+                authorization:refreshToken
+            }
         });
         if (token.status !== 200) {
             return "Bearer ";
         }
         localStorage.setItem("accessToken", token.data.accessToken);
+        console.log("Bearer " + token.data.accessToken)
         return "Bearer " + token.data.accessToken;
     }
     return authorization;

@@ -4,13 +4,9 @@ import { TypeContext } from "../store"
 import "../index.css"
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 import {actions} from "../store"
+import moneyFormatter from "../utils/moneyFormat"
 function ProductCard({product}) {
     const [, dispatch] = useContext(TypeContext);
-
-    var formatter = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-    })
 
     let location = useLocation();
     if (location.pathname === "/") {
@@ -44,7 +40,7 @@ function ProductCard({product}) {
                 <div>
                     <p className="font-bold my-2 text-center product-item-name">{product.product_name}</p>
                     <p className="font-bold text-red-500 text-center">
-                        {formatter.format(product.price)}
+                        {moneyFormatter.format(product.price)}
                     </p>
                 </div>
             </div>

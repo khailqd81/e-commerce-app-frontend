@@ -16,9 +16,11 @@ function App() {
       })
       if (checkToken.status !== 200) {
         const refreshToken = localStorage.getItem("refreshToken");
-        const token = await axios.post(`${process.env.REACT_APP_BACKEND_API}/refresh-token`, {
-          refreshToken
-        })
+        const token = await axios.get(`${process.env.REACT_APP_BACKEND_API}/refresh-token`, {
+          headers: {
+            authorization: refreshToken
+          }
+        });
         if (token.status !== 200) {
           dispatch(actions.setLogin(false));
         }
@@ -32,7 +34,7 @@ function App() {
       }
     }
     checkIsLogin();
-  },[dispatch]);
+  }, [dispatch]);
   console.log("login state: ", state.isLogin);
   return (
     <div className="font-roboto">
