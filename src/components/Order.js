@@ -62,7 +62,7 @@ function Order() {
                         )
                     })
                     :
-                    <div>Lịch sử mua hàng trống</div>
+                    <div className="text-red-500 text-center font-semibold">Lịch sử mua hàng trống</div>
             }
         </div>
     )

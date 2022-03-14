@@ -18,7 +18,7 @@ function ProductDetail() {
     const [product, setProduct] = useState(state.product);
 
     useLayoutEffect(() => {
-        if (Object.keys(product).length === 0) {
+        if (Object.keys(product).length === 0 || product.product_id !== state.product.product_id) {
             const productId = localStorage.getItem("productId");
             let api = `${process.env.REACT_APP_BACKEND_API}/products/id?productId=${productId}`;
             fetch(api)
@@ -27,7 +27,7 @@ function ProductDetail() {
                     setProduct(data);
                 })
         }
-    }, [product]);
+    }, [product, state.product]);
 
     useEffect(() => {
         let timerID;

@@ -8,15 +8,19 @@ import { RiLoginBoxLine, RiGlobalLine } from "react-icons/ri"
 import { useState, useLayoutEffect } from "react";
 
 import axios from "axios";
-import { NavLink, Link, useNavigate, useSearchParams } from "react-router-dom"
+import { NavLink, Link, useNavigate } from "react-router-dom"
 
 import "../index.css"
 import { useStore, actions } from "../store";
 import isLogin from "../utils/isLogin";
+import { urlFormat } from "../utils/urlFormat";
 function Header() {
     const [state, dispatch] = useStore();
-    // const [searchInput, setSearchInput] = useState("");
-    let [searchParams, setSearchParams] = useSearchParams();
+    const [searchProducts, setSearchProducts] = useState([]);
+    const [username, setUsername] = useState("username");
+    // let [searchParams, setSearchParams] = useSearchParams();
+    let [searchInput, setSearchInput] = useState("");
+
     const navigate = useNavigate();
     const handleLogout = () => {
         dispatch(actions.setLogin(false));
@@ -38,42 +42,130 @@ function Header() {
             }
         }
         getCart();
-    },[state.productInCart, dispatch])
+    }, [state.productInCart, dispatch])
 
-    const handleOnSearchChange = (e) => {
+    useLayoutEffect(() => {
+        async function getUserInfo() {
+            const authorization = await isLogin();
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/account/id`, {
+                headers: {
+                    authorization: authorization
+                }
+            });
+            if (response.status === 200) {
+                setUsername(response.data.username);
+            } else {
+                setUsername("username");
+            }
+        }
+        getUserInfo();
+    }, [])
+
+    const handleOnSearchChange = async (e) => {
         let search = e.target.value;
         if (search) {
-            setSearchParams({search})
-        }
-        else {
-            setSearchParams({});
+            setSearchInput(search)
+            if (search.trim().length !== 0) {
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/products/search`, {
+                    params: {
+                        productName: search
+                    }
+                })
+                const products = response.data;
+                if (products.length !== 0) {
+                    // newProduct là mảng mới chứa các product mà có thêm trường category_name
+                    let newProduct = [];
+
+                    let maxCount = 0;
+                    for (let product of products) {
+                        maxCount++;
+                        if (maxCount > 5) {
+                            break;
+                        }
+                        const category = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
+                        console.log(window.location)
+                        let productLink = "/" + urlFormat(category.data.category_name) + "/" + urlFormat(product.product_name);
+                        console.log({
+                            ...product,
+                            productLink
+                        })
+                        newProduct.push({
+                            ...product,
+                            productLink
+                        })
+                    }
+                    setSearchProducts(newProduct);
+                } else {
+                    setSearchProducts(products);
+                }
+            }
+        } else {
+            setSearchInput("");
+            setSearchProducts([]);
         }
     }
 
-    const handleSearch = (e) => {
-        if (e.key === "Enter") {
-            const search = searchParams.get("search");
-            console.log(search);
+    const handleSearch = () => {
+        if (searchInput.trim().length !== 0) {
+            setSearchInput("")
+            const navigateStr = `/search?name=${searchInput}`;
+            navigate(navigateStr);
         }
+
     }
     return (
         <div>
             <div className="w-full bg-green-600">
-                <nav className="flex h-[50px] max-w-screen-xl  items-center text-white justify-between p-[14px] mx-auto">
+                <nav className="flex h-[50px] max-w-screen-xl  items-center text-white justify-between py-[14px] mx-auto">
                     <Link to="/" onClick={() => { dispatch(actions.setType("Điện thoại")) }} className="flex items-center cursor-pointer">
                         <SiAzurefunctions size={40} />
                         <p className="text-xl font-bold ml-[8px]">PaTiKa</p>
                     </Link>
-                    <div className="hidden sm:flex items-center bg-white px-[10px] py-[6px] rounded">
+                    <div
+                        className="relative hidden sm:flex items-center bg-white px-3 py-2 rounded"
+                    >
                         <input
                             className="outline-none text-black placeholder-gray-400 min-w-[360px] pr-20"
                             placeholder="Nhập tên sản phẩm cần tìm ..."
                             type="text"
-                            value={searchParams.get("search") || ""}
+                            value={searchInput}
                             onChange={handleOnSearchChange}
-                            onKeyUp={handleSearch}
+                            onKeyUp={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSearch()
+                                }
+                            }}
                         />
                         <BsSearch className="text-gray-400" size={20} />
+                        {
+                            searchInput.length !== 0 ?
+                                searchProducts.length !== 0 ?
+                                    <ul className="absolute top-[calc(100%+4px)] left-0 w-full bg-white shadow-xl rounded z-10">
+
+                                        {
+                                            searchProducts.map((searchProduct) => {
+                                                return (
+                                                    <li key={searchProduct.product_id}>
+                                                        <Link
+                                                            to={searchProduct.productLink}
+                                                            className="block text-black px-3 py-2 w-full bg-white hover:bg-gray-200"
+                                                            onClick={() => {
+                                                                dispatch(actions.setProduct(searchProduct))
+                                                                setSearchInput("");
+                                                            }}
+                                                        >
+                                                            {searchProduct.product_name}
+                                                        </Link>
+                                                    </li>
+                                                )
+                                            })
+
+                                        }
+                                    </ul>
+                                    :
+                                    <div className="absolute top-[calc(100%+4px)] left-0 w-full px-3 py-2 text-center text-red-500 bg-white shadow-xl rounded z-10">Không tìm thấy sản phẩm phù hợp</div>
+                                : <div></div>
+                        }
                     </div>
 
                     {state.isLogin ?
@@ -83,10 +175,10 @@ function Header() {
                                 <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%] border">{state.productInCart}</span>
                                 Giỏ hàng
                             </Link>
-                            <div className="relative account-item nav-item flex items-center cursor-divointer hover:text-neutral-200">
+                            <div className="relative account-item nav-item flex items-center cursor-pointer hover:text-neutral-200">
                                 <VscAccount size={25} className="mr-[8px] text-white" />
-                                Thông tin tài khoản
-                                <ul className="account-item__list hidden absolute top-[calc(100%+6px)] bg-white left-0 shadow-2xl rounded z-10">
+                                <span>{username}</span>
+                                <ul className="account-item__list hidden absolute top-[calc(100%+6px)] bg-white right-0 shadow-2xl rounded z-10 min-w-[180px]">
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/order">Lịch sử mua hàng</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Thông tin tài khoản</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
@@ -123,7 +215,7 @@ function Header() {
             </div>
 
             <div className="w-full bg-green-400">
-                <div className="flex max-w-screen-xl items-center text-white mx-auto px-[14px]">
+                <div className="flex max-w-screen-xl items-center text-white mx-auto">
                     <ul className="flex">
                         <li>
                             <NavLink

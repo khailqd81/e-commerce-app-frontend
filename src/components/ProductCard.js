@@ -1,37 +1,42 @@
-import { Link, useLocation } from "react-router-dom"
-import { useContext } from "react"
-import { TypeContext } from "../store"
-import "../index.css"
+import axios from "axios"
+import { useLayoutEffect, useState } from "react"
+import { Link } from "react-router-dom"
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
-import {actions} from "../store"
+import "../index.css"
+import { useStore } from "../store"
+import { actions } from "../store"
 import moneyFormatter from "../utils/moneyFormat"
-function ProductCard({product}) {
-    const [, dispatch] = useContext(TypeContext);
+import { urlFormat } from "../utils/urlFormat"
+function ProductCard({ product }) {
+    const [, dispatch] = useStore();
+    const [urlName, setUrlName] = useState("/");
 
-    let location = useLocation();
-    if (location.pathname === "/") {
-        location.pathname = "/dien-thoai";
-    }
+    useLayoutEffect(() => {
+        async function getCategory() {
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
+            const category = response.data;
+            let newUrlName;
+            if (category.category_name) {
+                newUrlName = "/" + urlFormat(category.category_name) + "/" + urlFormat(product.product_name);
+            }
+            else {
+                newUrlName = "/dien-thoai" + urlFormat(product.product_name);
+            }
+            setUrlName(newUrlName);
+        }
 
-    // Hàm bỏ dấu tiếng việt tham khảo https://www.tunglt.com/2018/11/bo-dau-tieng-viet-javascript-es6/
-    const removeAccents = (str) => {
-        return str.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd').replace(/Đ/g, 'D');
-    }
+        getCategory();
+    }, [product.category_id, product.product_name])
 
-    // Hàm chuyển sang dạng kebabCase tham khảo https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-123.php
-    const toKebabCase = str =>
-        str &&
-        str
-            .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
-            .map(x => x.toLowerCase())
-            .join('-');
+    // let location = useLocation();
+    // if (location.pathname === "/") {
+    //     location.pathname = "/dien-thoai";
+    // }
 
-    const urlName = toKebabCase(removeAccents(product.product_name));
+
     return (
-        <Link 
-            to={`${location.pathname}/${urlName}`} 
+        <Link
+            to={`${urlName}`}
             className="basis-[100%] sm:basis-[25%] md:basis-[20%] p-1 text-md "
             onClick={() => dispatch(actions.setProduct(product))}
         >
