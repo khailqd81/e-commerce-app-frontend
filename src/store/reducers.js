@@ -1,8 +1,9 @@
-import { SET_TYPE, SET_PRODUCT, SET_LOGIN, SET_PRODUCT_IN_CART } from "./constants"
+import { SET_TYPE, SET_PRODUCT, SET_LOGIN, SET_PRODUCT_IN_CART, SET_ROLE } from "./constants"
 const initialState = {
     type: "Điện thoại",
     product: {},
     isLogin: false,
+    role: "",
     productInCart: 0
 }
 
@@ -29,6 +30,11 @@ function reducer(state, action) {
             return {
                 ...state,
                 productInCart: action.payload
+            }
+        case SET_ROLE:
+            return {
+                ...state,
+                role: action.payload
             }
         default:
             return state;

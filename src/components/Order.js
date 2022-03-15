@@ -1,34 +1,39 @@
 import axios from "axios";
-import { useLayoutEffect, useState } from "react"
-
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 import isLogin from "../utils/isLogin"
 import moneyFormatter from "../utils/moneyFormat";
 function Order() {
     const [orderDetails, setOrderDetails] = useState([]);
-    useLayoutEffect(() => {
+    let navigate = useNavigate();
+    useEffect(() => {
         async function getOrder() {
             const authorization = await isLogin();
-            const orders = await axios.get(`${process.env.REACT_APP_BACKEND_API}/order`, {
-                headers: {
-                    authorization
+            if (authorization === "NotLogin") {
+                navigate("/", { replace: true });
+            }
+            else {
+                const orders = await axios.get(`${process.env.REACT_APP_BACKEND_API}/order`, {
+                    headers: {
+                        authorization
+                    }
+                })
+                if (orders.data.orderDetails) {
+                    setOrderDetails(orders.data.orderDetails.reverse());
                 }
-            })
-            if (orders) {
-                console.log(orders.data.orderDetails[0].products)
-                setOrderDetails(orders.data.orderDetails.reverse());
             }
         }
         getOrder();
-    }, [])
+    }, [navigate])
     let totalPayment = 0
     return (
-        <div className="flex flex-col max-w-screen-xl my-8 mx-auto">
+        <div className="flex flex-col max-w-screen-sm my-8 mx-auto">
             {
                 orderDetails.length !== 0 ?
                     orderDetails.map((orderDetail) => {
                         totalPayment = 0
                         return (
-                            <div key={orderDetail.order_id} className="flex flex-col mb-4 rounded-lg shadow-lg">
+                            <div key={orderDetail.order_id} className="flex flex-col mb-6 rounded-lg shadow-2xl">
                                 <div className="flex justify-between py-4 px-6 bg-gray-400 text-white">
                                     <p>Mã đơn hàng: {orderDetail.order_id}</p>
                                     <p>Thời gian: {new Date(orderDetail.date_created).toLocaleString("vi-VN")}</p>

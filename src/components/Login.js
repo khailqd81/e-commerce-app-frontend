@@ -1,7 +1,6 @@
 import { SiAzurefunctions } from "react-icons/si";
 import { useState } from "react"
 import axios from "axios";
-import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
 import { useStore, actions } from "../store"
 
@@ -18,19 +17,28 @@ function Login({ onClick }) {
         setInputs(newState);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit =  (e) => {
         e.preventDefault();
         console.log("inputs: ", inputs);
         axios.post(`${process.env.REACT_APP_BACKEND_API}/account/signin`, {
             username: inputs[0],
             password: inputs[1]
         })
-            .then(response => {
+            .then( async (response) => {
                 if (response.status === 200) {
                     const data = response.data;
                     localStorage.setItem("accessToken", data.accessToken);
                     localStorage.setItem("refreshToken", data.refreshToken);
-                    dispatch(actions.setLogin(true))
+                    const accountResponse = await axios.get(`${process.env.REACT_APP_BACKEND_API}/account/id`, {
+                        headers: {
+                          authorization:  "Bearer " + data.accessToken
+                        }
+                      });
+                      if (accountResponse.status === 200) {
+                        dispatch(actions.setRole(accountResponse.data.role));
+                        dispatch(actions.setLogin(true));
+                        console.log("Role: ", accountResponse.data.role)
+                      }
                     // const cookies = new Cookies();
                     // cookies.set('accessToken', data.accessToken, { path: '/' });
                     // cookies.set('refreshToken', data.refreshToken, { path: '/' });

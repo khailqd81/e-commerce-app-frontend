@@ -1,7 +1,7 @@
 import InputAmount from "./InputAmount"
-import { useState, useLayoutEffect, useEffect } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom"
 import { AiOutlineCheckCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
 
@@ -16,10 +16,14 @@ function ProductCart() {
         message: ""
     });
     const [, dispatch] = useStore();
+    let navigate = useNavigate();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         async function getCart() {
             const authorization = await isLogin();
+            if (authorization === "NotLogin") {
+                return navigate("/", { replace: true });
+            }
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/cart`, {
                 headers: {
                     authorization: authorization
@@ -56,7 +60,7 @@ function ProductCart() {
             }
         }
         getCart();
-    }, [])
+    }, [navigate])
 
     useEffect(() => {
         let timerID;

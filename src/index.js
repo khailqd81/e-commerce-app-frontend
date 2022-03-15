@@ -12,6 +12,8 @@ import ProductDetail from './components/ProductDetail';
 import ProductCart from './components/ProductCart';
 import SearchProducts from './components/SearchProducts';
 import Order from './components/Order';
+import AccountInfo from './components/AccountInfo';
+import AddProduct from './components/AddProduct';
 const arrRoutes = ["dien-thoai", "laptop","tablet","dong-ho-thong-minh"];
 ReactDOM.render(
   <React.StrictMode>
@@ -19,11 +21,11 @@ ReactDOM.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} >
-            <Route path="login" element={<UserLogin signin />} />
-            <Route path="signup" element={<UserLogin signup />} />
+            <Route exact path="login" element={<UserLogin signin />} />
+            <Route exact path="signup" element={<UserLogin signup />} />
             {arrRoutes.map((item) => {
               return (
-                <Route path={item} element={<Home />} key={item}>
+                <Route exact path={item} element={<Home />} key={item}>
                   <Route path=":productid" element={<ProductDetail />} />
                   <Route index element={<ListProduct />} />
                 </Route>
@@ -45,15 +47,21 @@ ReactDOM.render(
               <Route path=":smartwatchid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
             </Route> */}
-            <Route path="cart" element={<Home/>} >
+            <Route exact path="cart" element={<Home/>} >
               <Route path=":productid" element={<ProductDetail />} />
               <Route index element={<ProductCart />} />
             </Route>
-            <Route path="search" element={<Home/>} >
+            <Route exact path="search" element={<Home/>} >
               <Route index element={<SearchProducts />} />
             </Route>
-            <Route path="order" element={<Home/>} >
+            <Route exact path="order" element={<Home/>} >
               <Route index element={<Order />} />
+            </Route>
+            <Route exact path="account" element={<Home/>} >
+              <Route index element={<AccountInfo />} />
+            </Route>
+            <Route exact path="add-product" element={<Home/>} >
+              <Route index element={<AddProduct />} />
             </Route>
             {/* <Route index element={<ListProduct />} /> */}
             <Route path="*" element={<Home />} >

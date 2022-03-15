@@ -1,7 +1,7 @@
 import { SiAzurefunctions } from "react-icons/si";
 import { VscAccount } from "react-icons/vsc";
 import { BsSearch } from "react-icons/bs";
-import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart } from "react-icons/ai"
+import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart, AiOutlinePlusCircle } from "react-icons/ai"
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
 import { RiLoginBoxLine, RiGlobalLine } from "react-icons/ri"
@@ -83,12 +83,7 @@ function Header() {
                             break;
                         }
                         const category = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
-                        console.log(window.location)
                         let productLink = "/" + urlFormat(category.data.category_name) + "/" + urlFormat(product.product_name);
-                        console.log({
-                            ...product,
-                            productLink
-                        })
                         newProduct.push({
                             ...product,
                             productLink
@@ -168,9 +163,15 @@ function Header() {
                         }
                     </div>
 
-                    {state.isLogin ?
-                        (<div className="flex items-center ">
-                            <Link to="/cart" className="relative nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
+                    {state.isLogin
+                        ? (<div className="flex items-center ">
+                            {state.role === "admin" &&
+                                (<Link to="/add-product" className="relative nav-item flex items-center mr-7 cursor-pointer hover:text-neutral-200">
+                                    <AiOutlinePlusCircle size={30} className="mr-[8px] text-white" />
+                                    Thêm sản phẩm
+                                </Link>)
+                            }
+                            <Link to="/cart" className="relative nav-item flex items-center mr-4 cursor-pointer hover:text-neutral-200">
                                 <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
                                 <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%] border">{state.productInCart}</span>
                                 Giỏ hàng
@@ -186,7 +187,7 @@ function Header() {
                             </div>
                         </div>)
                         : (<div className="flex items-center ">
-                            <Link to="/signup" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
+                            <Link to="/signup" className="nav-item flex items-center mr-4 cursor-pointer hover:text-neutral-200">
                                 <RiGlobalLine size={30} className="mr-[8px] text-white" />
                                 Đăng ký
                             </Link>
