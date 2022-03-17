@@ -5,7 +5,7 @@ import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart, AiOutlinePlusC
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
 import { RiLoginBoxLine, RiGlobalLine } from "react-icons/ri"
-import { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 
 import axios from "axios";
 import { NavLink, Link, useNavigate } from "react-router-dom"
@@ -165,22 +165,35 @@ function Header() {
 
                     {state.isLogin
                         ? (<div className="flex items-center ">
-                            {state.role === "admin" &&
-                                (<Link to="/add-product" className="relative nav-item flex items-center mr-7 cursor-pointer hover:text-neutral-200">
-                                    <AiOutlinePlusCircle size={30} className="mr-[8px] text-white" />
-                                    Thêm sản phẩm
-                                </Link>)
+                            {state.role === "customer" &&
+                                (<Link to="/cart" className="relative nav-item flex items-center mr-4 cursor-pointer hover:text-neutral-200">
+                                    <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
+                                    <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%] border">{state.productInCart}</span>
+                                    Giỏ hàng
+                                </Link>
+                                )
                             }
-                            <Link to="/cart" className="relative nav-item flex items-center mr-4 cursor-pointer hover:text-neutral-200">
-                                <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
-                                <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%] border">{state.productInCart}</span>
-                                Giỏ hàng
-                            </Link>
+
                             <div className="relative account-item nav-item flex items-center cursor-pointer hover:text-neutral-200">
                                 <VscAccount size={25} className="mr-[8px] text-white" />
                                 <span>{username}</span>
                                 <ul className="account-item__list hidden absolute top-[calc(100%+6px)] bg-white right-0 shadow-2xl rounded z-10 min-w-[180px]">
-                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/order">Lịch sử mua hàng</Link></li>
+                                    {state.role === "admin"
+                                        && (
+                                            <React.Fragment>
+                                                <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">
+                                                    <Link to="/add-product" >
+                                                        {/* 
+                                                        className="relative nav-item flex items-center mr-7 cursor-pointer hover:text-neutral-200"
+                                                    <AiOutlinePlusCircle size={30} className="mr-[8px] text-white" /> */}
+                                                        Thêm sản phẩm
+                                                    </Link>
+                                                </li>
+                                                <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">
+                                                    <Link to="/users" >Quản lý người dùng</Link>
+                                                </li>
+                                            </React.Fragment>)}
+                                    {state.role === "customer" && <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/order">Lịch sử mua hàng</Link></li>}
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Thông tin tài khoản</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
                                 </ul>
@@ -196,22 +209,6 @@ function Header() {
                                 Đăng nhập
                             </Link>
                         </div>)}
-                    {/* <Link to="/signup" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
-                        <RiGlobalLine size={30} className="mr-[8px] text-white" />
-                        Đăng ký
-                    </Link>
-                    <Link to="/login" className="nav-item flex items-center cursor-pointer hover:text-neutral-200">
-                        <RiLoginBoxLine size={25} className="mr-[8px] text-white" />
-                        Đăng nhập
-                    </Link> */}
-                    {/* <Link to="/cart" className="nav-item flex items-center mr-[16px] cursor-pointer hover:text-neutral-200">
-                            <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
-                            Giỏ hàng
-                        </Link>
-                        <Link to="/account" className="nav-item flex items-center cursor-pointer hover:text-neutral-200">
-                            <VscAccount size={25} className="mr-[8px] text-white" />
-                            Thông tin tài khoản
-                        </Link> */}
                 </nav>
             </div>
 

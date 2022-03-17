@@ -8,7 +8,7 @@ function UserLogin(props) {
         if (props.signup) {
             setIsFormLogin(false)
         }
-    }, [])
+    }, [props.signup])
 
     const handleSwitch = () => {
         setIsFormLogin(!isFormLogin);

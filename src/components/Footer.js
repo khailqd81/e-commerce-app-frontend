@@ -9,11 +9,11 @@ function Footer() {
 
             <div className="mt-3">
                 <p>Liên hệ</p>
-                <a href="#" className="flex items-center justify-center my-3 text-sky-600">
+                <a href="/" className="flex items-center justify-center my-3 text-sky-600">
                     <p className="mr-4">Facebook: Phạm Tiến Khải</p>
                     <GrFacebook size={30} color="blue"/>
                 </a>
-                <a href="#" className="flex items-center justify-center my-3 text-sky-600">
+                <a href="/" className="flex items-center justify-center my-3 text-sky-600">
                     <p className="mr-4">Google: khailqd81@gmail.com</p>
                     <FcGoogle  size={30}/>
                 </a>

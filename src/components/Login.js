@@ -6,7 +6,7 @@ import { useStore, actions } from "../store"
 
 
 function Login({ onClick }) {
-    const [state, dispatch] = useStore();
+    const [, dispatch] = useStore();
     const [message, setMessage] = useState("");
     const [inputs, setInputs] = useState(["", ""]);
     const navigate = useNavigate();

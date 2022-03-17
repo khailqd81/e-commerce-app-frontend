@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useState } from "react"
 import { SiAzurefunctions } from "react-icons/si";
-import { useNavigate } from "react-router-dom";
 import InputForm from "./InputForm";
 function Signup({ onClick }) {
-
-    const navigate = useNavigate();
+    
     const [inputs, setInputs] = useState({
         username: "",
         password: "",
