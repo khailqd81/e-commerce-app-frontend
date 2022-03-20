@@ -1,7 +1,7 @@
 import { SiAzurefunctions } from "react-icons/si";
 import { VscAccount } from "react-icons/vsc";
 import { BsSearch } from "react-icons/bs";
-import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart, AiOutlinePlusCircle } from "react-icons/ai"
+import { AiOutlineTablet, AiOutlineLaptop, AiOutlineShoppingCart } from "react-icons/ai"
 import { BsSmartwatch } from "react-icons/bs"
 import { GiSmartphone } from "react-icons/gi"
 import { RiLoginBoxLine, RiGlobalLine } from "react-icons/ri"
@@ -181,20 +181,20 @@ function Header() {
                                     {state.role === "admin"
                                         && (
                                             <React.Fragment>
-                                                <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">
-                                                    <Link to="/add-product" >
-                                                        {/* 
-                                                        className="relative nav-item flex items-center mr-7 cursor-pointer hover:text-neutral-200"
-                                                    <AiOutlinePlusCircle size={30} className="mr-[8px] text-white" /> */}
+                                                <li>
+                                                    <Link to="/add-product" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">
                                                         Thêm sản phẩm
                                                     </Link>
                                                 </li>
-                                                <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">
-                                                    <Link to="/users" >Quản lý người dùng</Link>
+                                                <li>
+                                                    <Link to="/users" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Quản lý người dùng</Link>
+                                                </li>
+                                                <li>
+                                                    <Link to="/statistic" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Xem thống kê</Link>
                                                 </li>
                                             </React.Fragment>)}
-                                    {state.role === "customer" && <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/order">Lịch sử mua hàng</Link></li>}
-                                    <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer"><Link to="/account">Thông tin tài khoản</Link></li>
+                                    {state.role === "customer" && <li><Link to="/order" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Lịch sử mua hàng</Link></li>}
+                                    <li><Link to="/account" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Thông tin tài khoản</Link></li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
                                 </ul>
                             </div>

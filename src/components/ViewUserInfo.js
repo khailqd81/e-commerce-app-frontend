@@ -34,7 +34,7 @@ function UserInfo() {
             }
         }
         getInfo();
-    }, [navigate])
+    }, [navigate, param.itemid])
     return (
         <AccountInfo accInfo={accInfo}/>
     )

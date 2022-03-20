@@ -16,7 +16,8 @@ import ViewUserInfo from './components/ViewUserInfo';
 import UserInfo from './components/UserInfo';
 import AddProduct from './components/AddProduct';
 import ListAccount from './components/ListAccount';
-const arrRoutes = ["dien-thoai", "laptop","tablet","dong-ho-thong-minh"];
+import Statistic from './components/Statistic';
+const arrRoutes = ["dien-thoai", "laptop", "tablet", "dong-ho-thong-minh"];
 ReactDOM.render(
   <React.StrictMode>
     <TypeProvider>
@@ -49,25 +50,28 @@ ReactDOM.render(
               <Route path=":smartwatchid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
             </Route> */}
-            <Route exact path="cart" element={<Home/>} >
+            <Route exact path="cart" element={<Home />} >
               <Route path=":productid" element={<ProductDetail />} />
               <Route index element={<ProductCart />} />
             </Route>
-            <Route exact path="search" element={<Home/>} >
+            <Route exact path="search" element={<Home />} >
               <Route index element={<SearchProducts />} />
             </Route>
-            <Route exact path="order" element={<Home/>} >
+            <Route exact path="order" element={<Home />} >
               <Route index element={<Order />} />
             </Route>
-            <Route exact path="account" element={<Home/>} >
-              <Route index element={<UserInfo/>} />
+            <Route exact path="account" element={<Home />} >
+              <Route index element={<UserInfo />} />
             </Route>
-            <Route exact path="add-product" element={<Home/>} >
+            <Route exact path="statistic" element={<Home />} >
+              <Route index element={<Statistic />} />
+            </Route>
+            <Route exact path="add-product" element={<Home />} >
               <Route index element={<AddProduct />} />
             </Route>
-            <Route exact path="users" element={<Home/>} >
-            <Route path=":itemid" element={<ViewUserInfo />} />
-              <Route index element={<ListAccount/>} />
+            <Route exact path="users" element={<Home />} >
+              <Route path=":itemid" element={<ViewUserInfo />} />
+              <Route index element={<ListAccount />} />
             </Route>
             {/* <Route index element={<ListProduct />} /> */}
             <Route path="*" element={<Home />} >

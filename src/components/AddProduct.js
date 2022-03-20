@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+
 import isLogin from "../utils/isLogin"
 import add_image from "../add-image.png"
 import { handleUpload } from "../utils/firebaseUpload"
@@ -13,8 +14,6 @@ function AddProduct() {
         image_file: "",
         category_id: 1001,
     });
-    const [categoryList, setCategoryList] = useState([]);
-
     const [messages, setMessages] = useState({
         image: "",
         product_name: "",
@@ -26,16 +25,15 @@ function AddProduct() {
         success: true,
         message: ""
     });
+    const [categoryList, setCategoryList] = useState([]);
     const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
         async function getCategoryList() {
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category`);
             if (response) {
-                console.log(response.data)
                 setCategoryList(response.data);
-            }
-            else {
+            } else {
                 setCategoryList([]);
             }
         }
@@ -105,16 +103,21 @@ function AddProduct() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let check = false;
+        let newMessages = {};
         for (var property in inputs) {
             if (property.toString() === "category_id") {
                 continue;
             }
-            if (inputs[property].toString().trim().length === 0) {
-                messages[property] = "Vui lòng không để trống trường này."
+            if (inputs[property].length === 0 || inputs[property].trim().length === 0) {
+                newMessages[property] = "Vui lòng không để trống trường này."
                 check = true;
             }
         }
         if (check) {
+            setMessages(prev => ({
+                ...prev,
+                ...newMessages
+            }))
             return;
         }
         const authorization = await isLogin();
@@ -150,8 +153,7 @@ function AddProduct() {
                 category_id: 1001,
             })
             setImageUrl("")
-        }
-        else {
+        } else {
             setGlobalMessage({
                 success: false,
                 message: "Thêm sản phẩm thất bại."
