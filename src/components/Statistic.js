@@ -14,7 +14,6 @@ function Statistic() {
                     staField
                 }
             });
-            console.log(response.data);
             if (response.status === 200) {
                 if (staField === "pro_sold") {
                     const products = (response.data).sort((a, b) => b.sold - a.sold);
@@ -78,21 +77,25 @@ function Statistic() {
     }
     const options = {
         plugins: {
-            legend: { 
+            legend: {
                 display: true,
                 position: "top"
-             },
+            },
             title: {
                 display: true,
                 fontSize: 20,
-                text: 'Số lượng sản phẩm của cửa hàng'
+                text: staField === "sold"
+                    ? 'Số lượng sản phẩm đã bán theo loại của cửa hàng.'
+                    : staField === "quantity"
+                        ? "Số lượng sản phẩm còn lại theo loại của cửa hàng."
+                        : "Số lượng sản phẩm đã bán của cửa hàng."
             },
         }
 
     }
     return (
         <div className="max-w-screen-lg mx-auto my-8 flex flex-col">
-            <div className="text-lg font-bold text-green-500 border border-green-500 max-w-[140px] text-center rounded py-2 px-4">Thống kê</div>
+            <div className="text-lg font-bold text-green-500 border border-green-500 max-w-[140px] text-center rounded py-2 px-4 mb-8">Thống kê</div>
             <div className="flex justify-center mb-8">
                 <div
                     className={staField === "sold"
@@ -119,7 +122,7 @@ function Statistic() {
                     }
                     onClick={() => handleChange("pro_sold")}
                 >
-                    Sản phẩm đã bán theo loại
+                    Sản phẩm đã bán theo từng sản phẩm
                 </div>
             </div>
 

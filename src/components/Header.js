@@ -22,6 +22,7 @@ function Header() {
     let [searchInput, setSearchInput] = useState("");
 
     const navigate = useNavigate();
+
     const handleLogout = () => {
         dispatch(actions.setLogin(false));
         localStorage.removeItem("accessToken");
@@ -195,6 +196,9 @@ function Header() {
                                             </React.Fragment>)}
                                     {state.role === "customer" && <li><Link to="/order" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Lịch sử mua hàng</Link></li>}
                                     <li><Link to="/account" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Thông tin tài khoản</Link></li>
+                                    <li>
+                                        <Link to="/statistic" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Xem thống kê</Link>
+                                    </li>
                                     <li className="text-black py-2 px-4 hover:bg-gray-300 cursor-pointer" onClick={handleLogout}>Đăng xuất</li>
                                 </ul>
                             </div>

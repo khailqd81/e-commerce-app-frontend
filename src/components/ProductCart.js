@@ -132,13 +132,14 @@ function ProductCart() {
         const authorization = await isLogin();
 
         const response = await axios.delete(`${process.env.REACT_APP_BACKEND_API}/cart/remove`, {
-            product_id: product_id
-        },
-            {
-                headers: {
-                    authorization: authorization
-                },
-            })
+            headers: {
+                authorization: authorization
+            },
+            data: {
+                product_id: product_id
+
+            }
+        });
         if (response.status === 200) {
             dispatch(actions.setProductInCart(response.data.products.length))
             setProducts(response.data.products);

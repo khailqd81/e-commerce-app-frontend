@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import StarRatings from 'react-star-ratings';
 import isLogin from "../utils/isLogin"
 import moneyFormatter from "../utils/moneyFormat";
 function Order() {
     const [orderDetails, setOrderDetails] = useState([]);
+    const [starRating, setStarRating] = useState(0);
+    const [content, setContent] = useState("");
+    const [refresh, setRefresh] = useState(false);
     let navigate = useNavigate();
     useEffect(() => {
         async function getOrder() {
@@ -19,13 +23,41 @@ function Order() {
                     }
                 })
                 if (orders.data.orderDetails) {
+                    console.log(orders.data.orderDetails)
                     setOrderDetails(orders.data.orderDetails.reverse());
                 }
             }
         }
         getOrder();
-    }, [navigate])
-    let totalPayment = 0
+    }, [navigate, refresh])
+    let totalPayment = 0;
+
+    const changeRating = (newRating, name) => {
+        setStarRating(newRating)
+    }
+
+    const handleSubmit = async (e, product_id, order_id) => {
+        e.preventDefault();
+        if (starRating === 0) {
+            alert("Vui lòng chọn số sao cho sản phẩm");
+            return;
+        }
+        const authorization = await isLogin();
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/comment/add`,{
+            order_id,
+            product_id,
+            rating: starRating,
+            content
+        }, {
+            headers: {
+                authorization
+            }
+        })
+        setStarRating(0);
+        setContent("");
+        setRefresh(!refresh);
+        e.target.style.display = "none";
+    }
     return (
         <div className="flex flex-col max-w-screen-sm my-8 mx-auto">
             {
@@ -43,20 +75,86 @@ function Order() {
                                         (orderDetail.products).map((product) => {
                                             totalPayment += product.buyAmount * product.priced;
                                             return (
-                                                <li className="flex justify-between px-6 py-4 first:border-t border-b border-gray-200" key={product.product_id}>
-                                                    <div className="flex">
-                                                        <img
-                                                            src={product.image_url}
-                                                            alt={product.product_name}
-                                                            className="w-16 mr-4"
-                                                        />
-                                                        <div className="flex flex-col">
-                                                            <p>{product.product_name}</p>
-                                                            <p>x <span>{product.buyAmount}</span></p>
+                                                <li className="flex flex-col px-6 py-4 first:border-t border-b border-gray-200" key={product.product_id}>
+                                                    <div className="flex justify-between ">
+                                                        <div className="flex">
+                                                            <img
+                                                                src={product.image_url}
+                                                                alt={product.product_name}
+                                                                className="w-16 mr-4"
+                                                            />
+                                                            <div className="flex flex-col">
+                                                                <p>{product.product_name}</p>
+                                                                <p>x <span>{product.buyAmount}</span></p>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <p className="self-center ">Giá: <span className="text-red-500">{moneyFormatter.format(product.priced)}</span></p>
+                                                        <p className="self-center ">Giá: <span className="text-red-500">{moneyFormatter.format(product.priced)}</span></p>
+                                                    </div>
+                                                    {product.is_comment
+                                                        ? <p className="mt-8 text-green-500 self-end">Đã đánh giá</p>
+                                                        : <div className="self-end">
+                                                            <button
+                                                                className="text-white bg-green-500 hover:bg-green-600 py-2 px-8 rounded mt-8 max-w-[160px] "
+                                                                onClick={(e) => {
+                                                                    const form = e.target.nextElementSibling;
+                                                                    if (form.style.display === "block") {
+                                                                        form.style.display = "none";
+                                                                    } else {
+                                                                        form.style.display = "block";
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Đánh giá
+                                                            </button>
+                                                            <form
+                                                                className="hidden fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[50vw] rounded bg-white shadow-2xl py-4 px-8"
+                                                                onSubmit={(e) => { handleSubmit(e, product.product_id, orderDetail.order_id) }}
+                                                            >
+                                                                <div className="flex justify-between font-semibold">
+                                                                    Đánh giá sản phẩm
+                                                                    <span
+                                                                        className="border border-red-500 text-red-500 px-2 py-1 cursor-pointer"
+                                                                        onClick={(e) => {
+                                                                            e.target.parentNode.parentNode.style.display = "none"
+                                                                            setStarRating(0);
+                                                                            setContent("")
+                                                                        }}
+                                                                    >
+                                                                        X
+                                                                    </span>
+                                                                </div>
+                                                                <div className="py-4">Tên sản phẩm: <span className="font-bold">{product.product_name}</span></div>
+                                                                <div>
+                                                                    <StarRatings
+                                                                        rating={starRating}
+                                                                        starRatedColor="yellow"
+                                                                        changeRating={changeRating}
+                                                                        numberOfStars={5}
+                                                                        name='rating'
+                                                                    />
+                                                                </div>
+                                                                <div className="flex flex-col">
+                                                                    <label htmlFor="content" className="py-4">Nội dung</label>
+                                                                    <textarea
+                                                                        id="content"
+                                                                        className="outline-none p-2 border border-gray-500 focus:border-green-400"
+                                                                        rows={4}
+                                                                        placeholder="Nhập nội dung đánh giá"
+                                                                        value={content}
+                                                                        onChange={(e) => setContent(e.target.value)}
+                                                                    ></textarea>
+                                                                </div>
+
+                                                                <button
+                                                                    className="flex ml-auto text-white bg-green-500 hover:bg-green-600 py-2 px-8 rounded mt-8 max-w-[160px] "
+                                                                    type="submit"
+                                                                >
+                                                                    Gửi đánh giá
+                                                                </button>
+                                                            </form>
+                                                        </div>}
+
                                                 </li>
                                             )
                                         })
