@@ -111,17 +111,17 @@ function Header() {
     }
     return (
         <div>
-            <div className="w-full bg-green-600">
+            <div className="w-full bg-green-600 px-2">
                 <nav className="flex h-[50px] max-w-screen-xl  items-center text-white justify-between py-[14px] mx-auto">
                     <Link to="/" onClick={() => { dispatch(actions.setType("Điện thoại")) }} className="flex items-center cursor-pointer">
                         <SiAzurefunctions size={40} />
                         <p className="text-xl font-bold ml-[8px]">PaTiKa</p>
                     </Link>
                     <div
-                        className="relative hidden sm:flex items-center bg-white px-3 py-2 rounded"
+                        className="relative flex items-center bg-white px-3 py-2 rounded"
                     >
                         <input
-                            className="outline-none text-black placeholder-gray-400 min-w-[360px] pr-20"
+                            className="hidden md:block outline-none text-black placeholder-gray-400 min-w-[360px] pr-20"
                             placeholder="Nhập tên sản phẩm cần tìm ..."
                             type="text"
                             value={searchInput}
@@ -132,7 +132,7 @@ function Header() {
                                 }
                             }}
                         />
-                        <BsSearch className="text-gray-400" size={20} />
+                        <BsSearch className={searchInput.length !==0 ? "text-gray-400 cursor-pointer":"text-gray-400"} size={20} onClick={handleSearch} />
                         {
                             searchInput.length !== 0 ?
                                 searchProducts.length !== 0 ?
@@ -170,14 +170,14 @@ function Header() {
                                 (<Link to="/cart" className="relative nav-item flex items-center mr-4 cursor-pointer hover:text-neutral-200">
                                     <AiOutlineShoppingCart size={30} className="mr-[8px] text-white" />
                                     <span className="absolute bg-red-400 text-white rounded-3xl z-10 px-2 left-[-20%] top-[-20%] border">{state.productInCart}</span>
-                                    Giỏ hàng
+                                    <span className="hidden md:block">Giỏ hàng</span>
                                 </Link>
                                 )
                             }
 
                             <div className="relative account-item nav-item flex items-center cursor-pointer hover:text-neutral-200">
                                 <VscAccount size={25} className="mr-[8px] text-white" />
-                                <span>{username}</span>
+                                <span className="hidden md:block">{username}</span>
                                 <ul className="account-item__list hidden absolute top-[calc(100%+6px)] bg-white right-0 shadow-2xl rounded z-10 min-w-[180px]">
                                     {state.role === "admin"
                                         && (
@@ -189,9 +189,6 @@ function Header() {
                                                 </li>
                                                 <li>
                                                     <Link to="/users" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Quản lý người dùng</Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/statistic" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Xem thống kê</Link>
                                                 </li>
                                             </React.Fragment>)}
                                     {state.role === "customer" && <li><Link to="/order" className="block text-black py-2 px-4 hover:bg-gray-300 cursor-pointer">Lịch sử mua hàng</Link></li>}
@@ -218,45 +215,46 @@ function Header() {
 
             <div className="w-full bg-green-400">
                 <div className="flex max-w-screen-xl items-center text-white mx-auto">
-                    <ul className="flex">
-                        <li>
+                    <ul className="flex flex-wrap">
+                        <li className="basis-2/4 md:basis-auto">
                             <NavLink
                                 to="/dien-thoai"
                                 onClick={() => { dispatch(actions.setType("Điện thoại")) }}
                                 className={({ isActive }) =>
-                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
+                                    isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center"}>
                                 <GiSmartphone size={20} />
                                 <span className="ml-1">Điện thoại</span>
                             </NavLink>
                         </li>
-                        <li>
+                        <li className="basis-2/4 md:basis-auto">
                             <NavLink
                                 to="/tablet"
                                 onClick={() => { dispatch(actions.setType("Tablet")) }}
                                 className={({ isActive }) =>
-                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
+                                    isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center"}>
                                 <AiOutlineTablet size={20} />
                                 <span className="ml-1">Tablet</span>
                             </NavLink>
                         </li>
-                        <li>
+                        <li className="basis-2/4 md:basis-auto">
                             <NavLink
                                 to="/laptop"
                                 onClick={() => { dispatch(actions.setType("Laptop")) }}
                                 className={({ isActive }) =>
-                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
+                                    isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center h-full" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center h-full"}>
                                 <AiOutlineLaptop size={20} />
                                 <span className="ml-1">Laptop</span>
                             </NavLink>
                         </li>
-                        <li>
+                        <li className="basis-2/4 md:basis-auto text-center">
                             <NavLink
                                 to="/dong-ho-thong-minh"
                                 onClick={() => { dispatch(actions.setType("Đồng hồ thông minh")) }}
                                 className={({ isActive }) =>
-                                    isActive ? "flex items-center mr-4 bg-green-500 p-2" : "flex items-center mr-4 hover:bg-green-500 p-2"}>
+                                    isActive ? "flex items-center bg-green-500 p-2 justify-center" : "flex items-center hover:bg-green-500 p-2 justify-center"}>
                                 <BsSmartwatch size={20} />
-                                <span className="ml-1">Đồng hồ thông minh</span>
+                                <span className="ml-1 hidden md:block">Đồng hồ thông minh</span>
+                                <span className="ml-1 md:hidden">Đồng hồ</span>
                             </NavLink>
                         </li>
 

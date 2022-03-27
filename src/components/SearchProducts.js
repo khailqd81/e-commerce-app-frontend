@@ -58,7 +58,8 @@ function SearchProducts() {
             <div className={listClassName}>
 
                 {
-                    products.length !== 0 ?
+                    products.length !== 0
+                        ?
                         products.map((product) => {
                             return (
                                 <ProductCard

@@ -28,6 +28,7 @@ function ProductDetail() {
 
     useEffect(() => {
         async function getProductDetail() {
+            window.scrollTo(0,0);
             // if (Object.keys(product).length === 0 || product.product_id !== state.product.product_id) {
             const productId = localStorage.getItem("productId");
             let api = `${process.env.REACT_APP_BACKEND_API}/products/id?productId=${productId}`;
@@ -47,10 +48,11 @@ function ProductDetail() {
                 if (!Number.isNaN(averageRating)) {
                     setRating(averageRating)
                 }
+
                 setStarRatings(starArr);
                 setProduct(response.data);
                 setComments({
-                    list: response.data.comments,
+                    list: response.data.comments.reverse(),
                     star: 6
                 })
             }
@@ -143,7 +145,7 @@ function ProductDetail() {
 
     }
     return (
-        <div className="flex flex-col max-w-screen-xl mx-auto">
+        <div className="flex flex-col max-w-screen-xl mx-auto mt-8">
             <div className="flex shadow-xl px-4 py-8 rounded">
                 <div className="flex-[2]">
                     <img src={product.image_url} className="max-w-full max-h-full border-r" alt={product.product_name} />
@@ -176,11 +178,13 @@ function ProductDetail() {
                 </div>
                 {showBox.check
                     ? showBox.response
-                        ? <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
+                        ? 
+                        <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
                             <AiOutlineCheckCircle size={60} className="text-green-500 text-bold" />
                             <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
                         </div>
-                        : <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
+                        : 
+                        <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
                             <ImCross size={60} className="text-red-500 text-bold" />
                             <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
                         </div>
@@ -189,7 +193,8 @@ function ProductDetail() {
 
             </div>
             {product.comments && product.comments.length !== 0
-                ? <div className="py-8 px-4 my-8 bg-white shadow-lg ">
+                ?
+                <div className="py-8 px-4 my-8 bg-white shadow-lg ">
                     <p className="pb-8 text-xl">ĐÁNH GIÁ SẢN PHẨM</p>
                     <div className="flex py-8 px-4 bg-green-50 border border-green-400">
                         <div className="flex flex-col">
@@ -257,7 +262,8 @@ function ProductDetail() {
                         </div>
                     </div>
                     {comments.list.length !== 0
-                        ? <ul className="mt-8">
+                        ?
+                        <ul className="mt-8">
                             {comments.list.map(comment => {
                                 return (<li key={comment.cmt_id} className="flex border-t px-4 py-6">
                                     <div className="flex basis-1/4">
@@ -284,18 +290,21 @@ function ProductDetail() {
                                 </li>)
                             })}
                         </ul>
-                        : <div>
+                        :
+                        <div>
                             <MdStars className="flex mx-auto text-gray-500 my-4" size={50} />
                             <p className="text-center text-gray-500">Chưa có đánh giá {comments.star} sao nào cho sản phẩm này</p>
-                        </div>}
+                        </div>
+                    }
                 </div>
-                : <div className="py-8 px-4 my-8 bg-white shadow-lg ">
+                :
+                <div className="py-8 px-4 my-8 bg-white shadow-lg ">
                     <p className="pb-8 text-xl">ĐÁNH GIÁ SẢN PHẨM</p>
                     <MdStars className="flex mx-auto text-gray-500 my-4" size={50} />
                     <p className="text-center text-gray-500">Chưa có đánh giá nào cho sản phẩm này</p>
-                </div>}
+                </div>
+            }
         </div>
-
     )
 }
 

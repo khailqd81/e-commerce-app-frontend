@@ -38,3 +38,27 @@ code {
   top: -6px;
   opacity: 0;
 }
+
+.slide-animate {
+  animation: move 1s linear;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+@keyframes move {
+  from {
+    transform: translateX(50%);
+  }
+  to {
+    transform: translateX();
+  }
+}

@@ -102,13 +102,15 @@ function AddProduct() {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(e.target.lastChild);
+        e.target.lastChild.disabled = true;
         let check = false;
         let newMessages = {};
         for (var property in inputs) {
             if (property.toString() === "category_id") {
                 continue;
             }
-            if (inputs[property].length === 0 || inputs[property].trim().length === 0) {
+            if (inputs[property].length === 0) {
                 newMessages[property] = "Vui lòng không để trống trường này."
                 check = true;
             }
@@ -159,6 +161,7 @@ function AddProduct() {
                 message: "Thêm sản phẩm thất bại."
             });
         }
+        e.target.lastChild.disabled = false;
         setInterval(() => {
             setGlobalMessage({
                 success: true,
@@ -177,7 +180,7 @@ function AddProduct() {
             </div>
             <div className="flex flex-col items-center my-4">
                 <label htmlFor="proName" className="cursor-pointer flex justify-center">
-                    <img src={imageUrl || add_image} className={imageUrl ? "max-w-[30%] max-h-[30%]" : "max-w-full opacity-40"} alt="add" />
+                    <img src={imageUrl || '/img/add-image.png'} className={imageUrl ? "max-w-[30%] max-h-[30%]" : "max-w-full opacity-40"} alt="add" />
                 </label>
                 {imageUrl
                     && <div
@@ -350,19 +353,20 @@ function AddProduct() {
                 {messages.quantity && <p className="mt-2 pl-[218px] text-red-400 text-sm">{messages.quantity}</p>}
 
             </div>
-            <button
-                className="my-4 px-8 py-4 bg-green-500 hover:bg-green-400 text-white max-w-[200px] rounded "
-                type="submit"
-            >
-                Thêm sản phẩm
-            </button>
             {globalMessage.message &&
                 <div
                     className={globalMessage.success
                         ? "fixed z-20 bg-white border border-green-400 text-green-500 py-8 px-16 top-[50%] shadow-xl rounded"
                         : "fixed z-20 bg-white border border-red-400 text-red-500 py-8 px-16 top-[50%] shadow-xl rounded"}
                 >{globalMessage.message}
-                </div>}
+                </div>
+            }
+            <button
+                className="my-4 px-8 py-4 bg-green-500 hover:bg-green-400 disabled:bg-green-400 text-white max-w-[200px] rounded "
+                type="submit"
+            >
+                Thêm sản phẩm
+            </button>
         </form>
     )
 }
