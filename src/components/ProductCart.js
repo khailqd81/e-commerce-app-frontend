@@ -189,10 +189,10 @@ function ProductCart() {
     return (
         <div className="max-w-screen-xl mx-auto mt-8 mb-16">
             {products.length !== 0 ?
-                <div>
-                    <table className="w-full shadow-md mb-6">
+                <div className="p-2 lg:p-0">
+                    <table className="hidden lg:table w-full shadow-md mb-6">
                         <thead className="h-[60px] border ">
-                            <tr >
+                            <tr>
                                 <th className="text-left pl-2">Sản phẩm</th>
                                 <th>Đơn giá</th>
                                 <th>Số lượng</th>
@@ -231,9 +231,36 @@ function ProductCart() {
                             })}
                         </tbody>
                     </table>
-                    <div className="flex justify-end">
-                        <p className="text-lg self-center">Tổng thanh toán: <span className="text-red-500 font-semibold">{moneyFormatter.format(totalPayment)}</span></p>
-                        <button className="border bg-green-500 hover:bg-green-400 px-16 py-2 ml-4 rounded text-white" onClick={handleAddOrder}>Mua hàng</button>
+                    <ul className="lg:hidden">
+                        {products.map((product, index) => {
+                            return (
+                                <li className="flex mb-4 pb-4 border-b">
+                                    <div className="basis-1/4">
+                                        <img src={product.image_url} alt={product.name} className="max-w-full" />
+                                    </div>
+                                    <div className="basis-3/4 text-left ml-4">
+                                        <div className="pb-2">{product.product_name}</div>
+                                        <div className="text-left text-red-500 pb-2">{moneyFormatter.format(product.price)}</div>
+                                        <InputAmount
+                                            styleContainer={"flex pb-2"}
+                                            amount={product.amount}
+                                            onIncrease={() => handleIncrease(index)}
+                                            onDecrease={() => handleDecrease(index)}
+                                            onChange={handleOnInputChange}
+                                            quantity={product.quantity}
+                                            index={index}
+                                        />
+                                        <div className="flex justify-end">
+                                            <button className="text-gray-400 hover:text-gray-500 p-3" onClick={() => handleRemoveFromCart(product.product_id)}>Xóa</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <div className="flex flex-wrap lg:justify-end">
+                        <p className="text-lg self-center basis-full lg:basis-auto">Tổng thanh toán: <span className="text-red-500 font-semibold">{moneyFormatter.format(totalPayment)}</span></p>
+                        <button className="border bg-green-500 hover:bg-green-400 px-16 py-2 lg:ml-4 mt-4 lg:mt-0 rounded text-white basis-full lg:basis-auto" onClick={handleAddOrder}>Mua hàng</button>
                     </div>
                 </div>
                 : <p className="text-red-500 font-semibold py-4 text-center min-h-[400px]">Không có sản phẩm nào trong giỏ hàng</p>}

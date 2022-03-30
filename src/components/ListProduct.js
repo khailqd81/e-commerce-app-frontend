@@ -3,8 +3,11 @@ import { useLocation } from "react-router-dom";
 import ProductCard from "./ProductCard"
 import { useStore } from "../store";
 import SlideShow from "./SlideShow";
+import axios from "axios";
+import { urlFormat } from "../utils/urlFormat";
 function ListProduct() {
     const [products, setProducts] = useState([]);
+    const [cateUrl, setCateUrl] = useState("dien-thoai");
     const [state,] = useStore();
     const location = useLocation();
     let category = state.type;
@@ -14,13 +17,14 @@ function ListProduct() {
     }
 
     useEffect(() => {
-        let api = `${process.env.REACT_APP_BACKEND_API}/category/${category}`;
-        fetch(api)
-            .then(response => response.json())
-            .then(data => {
-                setProducts(data.sort((a, b) => (a.product_name > b.product_name) ? 1 : -1));
-            })
-    }, [category]);
+        async function getAllProducts() {
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/${category}`);
+            const data = response.data;
+            setCateUrl(urlFormat(category));
+            setProducts(data.sort((a, b) => (a.product_name > b.product_name) ? 1 : -1));
+        }
+        getAllProducts();
+    }, [category, state.type]);
 
     let listClassName = `flex flex-wrap max-w-screen-xl mx-auto my-[20px]`;
     if (products.length === 0) {
@@ -82,30 +86,19 @@ function ListProduct() {
                 {
                     products.length !== 0
                         ?
-                        products.length > 10
-                            ?
-                            <React.Fragment>
-                                {products.map((product) => {
-                                    return (
-                                        <ProductCard
-                                            key={product.product_id}
-                                            product={product}
-                                        />
-                                    )
-                                })}
-                            </React.Fragment>
-                            :
-                            <React.Fragment>
-                                {products.map((product) => {
-                                    return (
-                                        <ProductCard
-                                            key={product.product_id}
-                                            product={product}
-                                        />
-                                    )
-                                })}
-                            </React.Fragment>
-                        : <p className="text-red-500 font-semibold py-4">Không có sản phẩm nào thuộc danh mục này</p>
+                        <React.Fragment>
+                            {products.map((product) => {
+                                return (
+                                    <ProductCard
+                                        key={product.product_id}
+                                        product={product}
+                                        cateUrl={cateUrl}
+                                    />
+                                )
+                            })}
+                        </React.Fragment>
+                        :
+                        <p className="text-red-500 font-semibold py-4">Không có sản phẩm nào thuộc danh mục này</p>
                 }
             </div>
         </div>

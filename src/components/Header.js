@@ -214,8 +214,8 @@ function Header() {
             </div>
 
             <div className="w-full bg-green-400">
-                <div className="flex max-w-screen-xl items-center text-white mx-auto">
-                    <ul className="flex flex-wrap">
+                <div className="flex md:max-w-screen-xl items-center text-white mx-auto">
+                    <ul className="flex flex-wrap w-full">
                         <li className="basis-2/4 md:basis-auto">
                             <NavLink
                                 to="/dien-thoai"

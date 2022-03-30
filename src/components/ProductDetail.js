@@ -56,12 +56,6 @@ function ProductDetail() {
                     star: 6
                 })
             }
-            // fetch(api)
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         setProduct(data);
-            //     })
-            // }
         }
         getProductDetail()
     }, [state.product]);
@@ -102,7 +96,6 @@ function ProductDetail() {
                 authorization: authorization
             },
         })
-        console.log(response.data);
         if (response.status === 200) {
 
             const newResponse = await axios.get(`${process.env.REACT_APP_BACKEND_API}/cart`, {
@@ -117,7 +110,6 @@ function ProductDetail() {
                     response: true,
                     message: "Sản phẩm đã được thêm vào giỏ hàng."
                 });
-                console.log("Ok")
             }
         } else {
             setShowBox({
@@ -125,7 +117,6 @@ function ProductDetail() {
                 response: false,
                 message: response.data.message
             });
-            console.log("Not ok")
         }
     }
 
@@ -146,9 +137,9 @@ function ProductDetail() {
     }
     return (
         <div className="flex flex-col max-w-screen-xl mx-auto mt-8">
-            <div className="flex shadow-xl px-4 py-8 rounded">
-                <div className="flex-[2]">
-                    <img src={product.image_url} className="max-w-full max-h-full border-r" alt={product.product_name} />
+            <div className="flex flex-wrap px-4 py-8 rounded shadow-xl">
+                <div className="basis-full md:basis-1/2 pb-8 md:pb-0">
+                    <img src={product.image_url} className="max-w-full max-h-full md:border-r" alt={product.product_name} />
                 </div>
                 <div className="flex flex-col flex-[3] pl-4">
                     <p className="text-3xl">{product.product_name}</p>
@@ -170,7 +161,7 @@ function ProductDetail() {
                         />
                     </div>
                     <button
-                        className="bg-green-600 hover:bg-green-500 py-4 px-6 text-white rounded-md mt-auto max-w-[200px] outline-none border-none"
+                        className="text-white bg-green-600 hover:bg-green-500 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"
                         onClick={() => handleAddToCart(product.product_id)}
                     >
                         Thêm vào giỏ hàng
@@ -179,12 +170,12 @@ function ProductDetail() {
                 {showBox.check
                     ? showBox.response
                         ? 
-                        <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
+                        <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[80vw] md:w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
                             <AiOutlineCheckCircle size={60} className="text-green-500 text-bold" />
                             <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
                         </div>
                         : 
-                        <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
+                        <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[80vw] md:w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
                             <ImCross size={60} className="text-red-500 text-bold" />
                             <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
                         </div>
@@ -194,11 +185,11 @@ function ProductDetail() {
             </div>
             {product.comments && product.comments.length !== 0
                 ?
-                <div className="py-8 px-4 my-8 bg-white shadow-lg ">
+                <div className="text-center py-8 md:px-4 my-8 bg-white shadow-lg ">
                     <p className="pb-8 text-xl">ĐÁNH GIÁ SẢN PHẨM</p>
-                    <div className="flex py-8 px-4 bg-green-50 border border-green-400">
-                        <div className="flex flex-col">
-                            <p className="text-lg text-red-500 self-center pb-6"><span className="text-4xl font-semibold">{rating.toFixed(1)}</span> trên 5</p>
+                    <div className="flex flex-wrap py-8 px-4 bg-green-50 border border-green-400">
+                        <div className="flex flex-col basis-full md:basis-1/4 pb-6">
+                            <p className=" self-center text-lg text-red-500 pb-6"><span className="text-4xl font-semibold">{rating.toFixed(1)}</span> trên 5</p>
                             <StarRatings
                                 rating={rating}
                                 starRatedColor="yellow"
@@ -211,24 +202,24 @@ function ProductDetail() {
                         <div>
                             <button
                                 className={comments.star === 6
-                                    ? "ml-2 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 py-2 px-4 border border-gray-300"}
+                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(6)}
                             >
                                 Tất cả <span>({starRatings.reduce((total, item) => total + item, 0)})</span>
                             </button>
                             <button
                                 className={comments.star === 5
-                                    ? "ml-2 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 py-2 px-4 border border-gray-300"}
+                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(5)}
                             >
                                 5 sao <span>({starRatings[4]})</span>
                             </button>
                             <button
                                 className={comments.star === 4
-                                    ? "ml-2 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 py-2 px-4 border border-gray-300"}
+                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(4)}
 
                             >
@@ -236,8 +227,8 @@ function ProductDetail() {
                             </button>
                             <button
                                 className={comments.star === 3
-                                    ? "ml-2 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 py-2 px-4 border border-gray-300"}
+                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(3)}
 
                             >
@@ -245,16 +236,16 @@ function ProductDetail() {
                             </button>
                             <button
                                 className={comments.star === 2
-                                    ? "ml-2 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 py-2 px-4 border border-gray-300"}
+                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(2)}
                             >
                                 2 sao <span>({starRatings[1]})</span>
                             </button>
                             <button
                                 className={comments.star === 1
-                                    ? "ml-2 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 py-2 px-4 border border-gray-300"}
+                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(1)}
                             >
                                 1 sao <span>({starRatings[0]})</span>
@@ -265,12 +256,12 @@ function ProductDetail() {
                         ?
                         <ul className="mt-8">
                             {comments.list.map(comment => {
-                                return (<li key={comment.cmt_id} className="flex border-t px-4 py-6">
-                                    <div className="flex basis-1/4">
+                                return (<li key={comment.cmt_id} className="flex flex-wrap text-left border-t px-4 py-6">
+                                    <div className="flex basis-full md:basis-1/4">
                                         <span className="self-center text-lg max-h-[48px] rounded-full bg-gray-300 py-3 px-4 text-gray-500">{comment.username[0].toUpperCase()}</span>
                                         <p className="ml-4 self-center">{comment.username}</p>
                                     </div>
-                                    <div className="flex flex-col basis-3/4">
+                                    <div className="flex flex-col md:basis-3/4">
                                         <StarRatings
                                             rating={comment.rating}
                                             starRatedColor="yellow"

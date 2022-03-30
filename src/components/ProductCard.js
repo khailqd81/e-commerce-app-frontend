@@ -7,24 +7,28 @@ import { useStore } from "../store"
 import { actions } from "../store"
 import moneyFormatter from "../utils/moneyFormat"
 import { urlFormat } from "../utils/urlFormat"
-function ProductCard({ product }) {
+function ProductCard({ product, cateUrl }) {
     const [, dispatch] = useStore();
     const [urlName, setUrlName] = useState("/");
-
     useLayoutEffect(() => {
         async function getCategory() {
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
-            const category = response.data;
-            let newUrlName;
-            if (category.category_name) {
-                newUrlName = "/" + urlFormat(category.category_name) + "/" + urlFormat(product.product_name);
+            if (cateUrl) {
+                let newUrlName = "/" + cateUrl  + "/" + urlFormat(product.product_name);
+                setUrlName(newUrlName);
+            } else {
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
+                const category = response.data;
+                let newUrlName;
+                if (category.category_name) {
+                    newUrlName = "/" + urlFormat(category.category_name) + "/" + urlFormat(product.product_name);
+                }
+                else {
+                    newUrlName = "/dien-thoai" + urlFormat(product.product_name);
+                }
+                setUrlName(newUrlName);
             }
-            else {
-                newUrlName = "/dien-thoai" + urlFormat(product.product_name);
-            }
-            setUrlName(newUrlName);
-        }
 
+        }
         getCategory();
     }, [product.category_id, product.product_name])
 
