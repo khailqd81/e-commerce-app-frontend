@@ -69,7 +69,7 @@ function SearchProducts() {
                             )
                         })
                         :
-                        <p className="text-red-500 font-semibold py-4">
+                        <p className="text-red-500 font-semibold py-4 px-2">
                             Không tìm thấy sản phẩm nào với từ khóa
                             <span>"{search}"</span>
                         </p>

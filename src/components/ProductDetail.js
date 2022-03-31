@@ -28,12 +28,11 @@ function ProductDetail() {
 
     useEffect(() => {
         async function getProductDetail() {
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             // if (Object.keys(product).length === 0 || product.product_id !== state.product.product_id) {
             const productId = localStorage.getItem("productId");
             let api = `${process.env.REACT_APP_BACKEND_API}/products/id?productId=${productId}`;
             const response = await axios.get(api);
-            console.log(response.data)
             if (response.data) {
                 const comments = response.data.comments;
                 const starArr = [];
@@ -44,7 +43,6 @@ function ProductDetail() {
                     starArr.push(amount);
                 }
                 const averageRating = sum / comments.length;
-                console.log(averageRating);
                 if (!Number.isNaN(averageRating)) {
                     setRating(averageRating)
                 }
@@ -161,20 +159,22 @@ function ProductDetail() {
                         />
                     </div>
                     <button
-                        className="text-white bg-green-600 hover:bg-green-500 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"
+                        className="text-white bg-green-600 hover:bg-green-500 disabled:bg-green-500 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"
                         onClick={() => handleAddToCart(product.product_id)}
+                        disabled={product.quantity <= 0 ? true : false}
                     >
                         Thêm vào giỏ hàng
                     </button>
+                    {product.quantity <= 0 && <p className="text-red-500 mt-4">Sản phẩm hiện đang hết hàng</p>}
                 </div>
                 {showBox.check
                     ? showBox.response
-                        ? 
+                        ?
                         <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[80vw] md:w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
                             <AiOutlineCheckCircle size={60} className="text-green-500 text-bold" />
                             <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
                         </div>
-                        : 
+                        :
                         <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[80vw] md:w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-red-500 rounded-2xl shadow-2xl">
                             <ImCross size={60} className="text-red-500 text-bold" />
                             <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
@@ -202,24 +202,24 @@ function ProductDetail() {
                         <div>
                             <button
                                 className={comments.star === 6
-                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
+                                    ? "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(6)}
                             >
                                 Tất cả <span>({starRatings.reduce((total, item) => total + item, 0)})</span>
                             </button>
                             <button
                                 className={comments.star === 5
-                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
+                                    ? "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(5)}
                             >
                                 5 sao <span>({starRatings[4]})</span>
                             </button>
                             <button
                                 className={comments.star === 4
-                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
+                                    ? "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(4)}
 
                             >
@@ -227,8 +227,8 @@ function ProductDetail() {
                             </button>
                             <button
                                 className={comments.star === 3
-                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
+                                    ? "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(3)}
 
                             >
@@ -236,16 +236,16 @@ function ProductDetail() {
                             </button>
                             <button
                                 className={comments.star === 2
-                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
+                                    ? "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(2)}
                             >
                                 2 sao <span>({starRatings[1]})</span>
                             </button>
                             <button
                                 className={comments.star === 1
-                                    ? "ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
-                                    : "ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
+                                    ? "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-green-500 text-green-500"
+                                    : "min-w-[104px] ml-2 my-1 md:my-0 py-2 px-4 border border-gray-300"}
                                 onClick={() => handleFilterComment(1)}
                             >
                                 1 sao <span>({starRatings[0]})</span>

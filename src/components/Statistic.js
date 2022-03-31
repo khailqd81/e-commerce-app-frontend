@@ -94,13 +94,13 @@ function Statistic() {
 
     }
     return (
-        <div className="max-w-screen-lg mx-auto my-8 flex flex-col">
+        <div className="flex flex-col max-w-screen-lg mx-auto my-8 px-4 md:px-0">
             <div className="text-lg font-bold text-green-500 border border-green-500 max-w-[140px] text-center rounded py-2 px-4 mb-8">Thống kê</div>
-            <div className="flex justify-center mb-8">
+            <div className="flex flex-col md:flex-row justify-center mb-8">
                 <div
                     className={staField === "sold"
-                        ? "py-2 px-4 border mr-4 cursor-pointer text-green-500 border border-green-500"
-                        : "py-2 px-4 border mr-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
+                        ? "py-2 px-4 border mb-2 md:mb-0 md:mr-4 cursor-pointer text-green-500 border border-green-500"
+                        : "py-2 px-4 border mb-2 md:mb-0 md:mr-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
                     }
                     onClick={() => handleChange("sold")}
                 >
@@ -108,8 +108,8 @@ function Statistic() {
                 </div>
                 <div
                     className={staField === "quantity"
-                        ? "py-2 px-4 border mr-4 cursor-pointer text-green-500 border border-green-500"
-                        : "py-2 px-4 border mr-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
+                        ? "py-2 px-4 border mb-2 md:mb-0 md:mr-4 cursor-pointer text-green-500 border border-green-500"
+                        : "py-2 px-4 border mb-2 md:mb-0 md:mr-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
                     }
                     onClick={() => handleChange("quantity")}
                 >
@@ -117,8 +117,8 @@ function Statistic() {
                 </div>
                 <div
                     className={staField === "pro_sold"
-                        ? "py-2 px-4 border mr-4 cursor-pointer text-green-500 border border-green-500"
-                        : "py-2 px-4 border mr-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
+                        ? "py-2 px-4 border mb-2 md:mb-0 md:mr-4 cursor-pointer text-green-500 border border-green-500"
+                        : "py-2 px-4 border mb-2 md:mb-0 md:mr-4 cursor-pointer bg-gray-100 hover:bg-gray-200"
                     }
                     onClick={() => handleChange("pro_sold")}
                 >

@@ -111,17 +111,36 @@ function Header() {
     }
     return (
         <div>
-            <div className="w-full bg-green-600 px-2">
-                <nav className="flex h-[50px] max-w-screen-xl  items-center text-white justify-between py-[14px] mx-auto">
+            <div className="w-full bg-green-600 md:px-2">
+                <nav className="flex px-2 md:px-0 relative h-[50px] max-w-screen-xl items-center text-white justify-between py-[14px] mx-auto">
                     <Link to="/" onClick={() => { dispatch(actions.setType("Điện thoại")) }} className="flex items-center cursor-pointer">
-                        <SiAzurefunctions size={40} />
+                        <SiAzurefunctions className="hidden md:block" size={40} />
+                        <SiAzurefunctions className="md:hidden" size={30} />
                         <p className="text-xl font-bold ml-[8px]">PaTiKa</p>
                     </Link>
+                    <BsSearch
+                        className="md:hidden text-white cursor-pointer"
+                        size={25}
+                        onClick={e => {
+                            if (e.target.nextElementSibling && e.target.nextElementSibling.classList.contains("hidden")) {
+                                e.target.nextElementSibling.classList.remove("hidden")
+                                e.target.nextElementSibling.classList.add("flex")
+                            } else if (e.target.nextElementSibling.classList.contains("flex")) {
+                                e.target.nextElementSibling.classList.remove("flex")
+                                e.target.nextElementSibling.classList.add("hidden")
+                            }
+                            // if (e.target.nextElementSibling && e.target.nextElementSibling.classList.contain("hidden")) {
+                            //     e.target.nextElementSibling.style.display = "flex"
+                            // } else if (e.target.nextElementSibling) {
+                            //     e.target.nextElementSibling.style.display = "none"
+                            // }
+                        }}
+                    />
                     <div
-                        className="relative flex items-center bg-white px-3 py-2 rounded"
+                        className="drop-search hidden md:flex justify-between items-center absolute w-full md:w-auto left-0 top-[100%] md:top-0 md:relative bg-white px-3 py-2 md:rounded"
                     >
                         <input
-                            className="hidden md:block outline-none text-black placeholder-gray-400 min-w-[360px] pr-20"
+                            className="outline-none text-black placeholder-gray-400 basis-[80%] md:basis-auto md:min-w-[360px] md:pr-20"
                             placeholder="Nhập tên sản phẩm cần tìm ..."
                             type="text"
                             value={searchInput}
@@ -132,35 +151,34 @@ function Header() {
                                 }
                             }}
                         />
-                        <BsSearch className={searchInput.length !==0 ? "text-gray-400 cursor-pointer":"text-gray-400"} size={20} onClick={handleSearch} />
+                        <BsSearch className={searchInput.length !== 0 ? "text-gray-400 cursor-pointer" : "text-gray-400"} size={20} onClick={handleSearch} />
                         {
-                            searchInput.length !== 0 ?
-                                searchProducts.length !== 0 ?
-                                    <ul className="absolute top-[calc(100%+4px)] left-0 w-full bg-white shadow-xl rounded z-10">
+                            searchInput.length !== 0 &&
+                            (searchProducts.length !== 0 ?
+                                <ul className="absolute top-[calc(100%+4px)] left-0 w-full bg-white shadow-xl rounded z-10">
 
-                                        {
-                                            searchProducts.map((searchProduct) => {
-                                                return (
-                                                    <li key={searchProduct.product_id}>
-                                                        <Link
-                                                            to={searchProduct.productLink}
-                                                            className="block text-black px-3 py-2 w-full bg-white hover:bg-gray-200"
-                                                            onClick={() => {
-                                                                dispatch(actions.setProduct(searchProduct))
-                                                                setSearchInput("");
-                                                            }}
-                                                        >
-                                                            {searchProduct.product_name}
-                                                        </Link>
-                                                    </li>
-                                                )
-                                            })
+                                    {
+                                        searchProducts.map((searchProduct) => {
+                                            return (
+                                                <li key={searchProduct.product_id}>
+                                                    <Link
+                                                        to={searchProduct.productLink}
+                                                        className="block text-black px-3 py-2 w-full bg-white hover:bg-gray-200"
+                                                        onClick={() => {
+                                                            dispatch(actions.setProduct(searchProduct))
+                                                            setSearchInput("");
+                                                        }}
+                                                    >
+                                                        {searchProduct.product_name}
+                                                    </Link>
+                                                </li>
+                                            )
+                                        })
 
-                                        }
-                                    </ul>
-                                    :
-                                    <div className="absolute top-[calc(100%+4px)] left-0 w-full px-3 py-2 text-center text-red-500 bg-white shadow-xl rounded z-10">Không tìm thấy sản phẩm phù hợp</div>
-                                : <div></div>
+                                    }
+                                </ul>
+                                :
+                                <div className="absolute top-[calc(100%+4px)] left-0 w-full px-3 py-2 text-center text-red-500 bg-white shadow-xl rounded z-10">Không tìm thấy sản phẩm phù hợp</div>)
                         }
                     </div>
 
@@ -175,8 +193,11 @@ function Header() {
                                 )
                             }
 
-                            <div className="relative account-item nav-item flex items-center cursor-pointer hover:text-neutral-200">
-                                <VscAccount size={25} className="mr-[8px] text-white" />
+                            <div 
+                                className="relative account-item nav-item flex items-center cursor-pointer hover:text-neutral-200"
+                                onClick={() => {}}
+                            >
+                                <VscAccount size={25} className="md:mr-[8px] text-white" />
                                 <span className="hidden md:block">{username}</span>
                                 <ul className="account-item__list hidden absolute top-[calc(100%+6px)] bg-white right-0 shadow-2xl rounded z-10 min-w-[180px]">
                                     {state.role === "admin"
@@ -201,7 +222,7 @@ function Header() {
                             </div>
                         </div>)
                         : (<div className="flex items-center ">
-                            <Link to="/signup" className="nav-item flex items-center mr-4 cursor-pointer hover:text-neutral-200">
+                            <Link to="/signup" className="hidden md:flex nav-item items-center mr-4 cursor-pointer hover:text-neutral-200">
                                 <RiGlobalLine size={30} className="mr-[8px] text-white" />
                                 Đăng ký
                             </Link>

@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState } from "react"
+import { Link } from "react-router-dom";
 import { SiAzurefunctions } from "react-icons/si";
 import InputForm from "./InputForm";
+import { actions, useStore } from "../store";
 function Signup({ onClick }) {
-    
+    const [,dispatch] = useStore()
     const [inputs, setInputs] = useState({
         username: "",
         password: "",
@@ -78,7 +80,10 @@ function Signup({ onClick }) {
             {
                 message.length !== 0 ? <p className="mt-8 w-full text-red-700 text-center py-3 bg-red-100 border-red-700 border rounded-md">{message}</p> : <p></p>
             }
-            <p className="mt-8 w-full text-gray-400">Bạn đã có tài khoản <span className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={onClick}>Đăng nhập ngay</span></p>
+            <p className="mt-8 w-full text-gray-400">Bạn đã có tài khoản ? <span className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={onClick}>Đăng nhập ngay</span></p>
+            <Link to="/" onClick={() => { dispatch(actions.setType("Điện thoại")) }} className="block w-full cursor-pointer mt-8">
+                <p className="text-blue-500 hover:text-blue-400">Quay về trang chủ</p>
+            </Link>
             <button className="mt-8 bg-green-500 hover:bg-green-400 p-3 w-full text-white rounded-lg" type="submit">Đăng ký</button>
         </form>
     )

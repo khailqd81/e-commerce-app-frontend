@@ -41,7 +41,7 @@ function ProductCard({ product, cateUrl }) {
     return (
         <Link
             to={`${urlName}`}
-            className="basis-[100%] sm:basis-[25%] md:basis-[20%] p-1 text-md "
+            className="basis-[100%] sm:basis-[50%] md:basis-[25%] lg:basis-[20%] p-1 text-md "
             onClick={() => dispatch(actions.setProduct(product))}
         >
             <div className="rounded px-4 pt-4 pb-6 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-transform bg-white" >

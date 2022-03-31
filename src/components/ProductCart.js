@@ -234,7 +234,7 @@ function ProductCart() {
                     <ul className="lg:hidden">
                         {products.map((product, index) => {
                             return (
-                                <li className="flex mb-4 pb-4 border-b">
+                                <li key={product.product_id} className="flex mb-4 pb-4 border-b">
                                     <div className="basis-1/4">
                                         <img src={product.image_url} alt={product.name} className="max-w-full" />
                                     </div>

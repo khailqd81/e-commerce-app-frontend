@@ -1,7 +1,7 @@
 import { SiAzurefunctions } from "react-icons/si";
 import { useState } from "react"
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useStore, actions } from "../store"
 
 
@@ -56,7 +56,7 @@ function Login({ onClick }) {
     return (
         <form
             onSubmit={handleSubmit}
-            className="my-auto bg-white shadow-2xl rounded-lg pt-10 pb-5 px-8"
+            className="my-auto flex flex-col bg-white shadow-2xl rounded-lg pt-10 pb-5 px-8"
         >
             <div className="flex w-full justify-center font-semibold text-2xl">
                 Đăng nhập vào PaTiKa
@@ -65,7 +65,7 @@ function Login({ onClick }) {
             <div className="mt-8">
                 <label htmlFor="username" className="font-semibold">Tên đăng nhập</label>
                 <input
-                    className="block border border-gray-200 hover:border-gray-300 focus:border-blue-400 mt-2 p-3 w-[40vw] outline-none"
+                    className="block border border-gray-200 hover:border-gray-300 focus:border-blue-400 mt-2 p-3 md:w-[40vw] w-full outline-none"
                     id="username"
                     placeholder="Nhập tên đăng nhập"
                     value={inputs[0]}
@@ -75,7 +75,7 @@ function Login({ onClick }) {
             <div className="mt-8">
                 <label htmlFor="password" className="font-semibold">Mật khẩu</label>
                 <input
-                    className="block border border-gray-200 hover:border-gray-300 focus:border-blue-400 mt-2 p-3 w-[40vw] outline-none"
+                    className="block border border-gray-200 hover:border-gray-300 focus:border-blue-400 mt-2 p-3 md:w-[40vw] w-full outline-none"
                     id="password"
                     placeholder="Nhập mật khẩu"
                     value={inputs[1]}
@@ -86,7 +86,10 @@ function Login({ onClick }) {
             {
                 message.length !== 0 ? <p className="mt-8 w-full text-red-700 text-center py-3 bg-red-100 border-red-700 border rounded-md">{message}</p> : <p></p>
             }
-            <p className="mt-8 w-full text-gray-400">Bạn chưa có tài khoản <span className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={onClick}>Đăng ký ngay</span></p>
+            <p className="mt-8 w-full text-gray-400">Bạn chưa có tài khoản ? <span className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={onClick}>Đăng ký ngay</span></p>
+            <Link to="/" onClick={() => { dispatch(actions.setType("Điện thoại")) }} className="w-full cursor-pointer mt-8">
+                <p className="text-blue-500 hover:text-blue-400">Quay về trang chủ</p>
+            </Link>
             <button className="mt-8 bg-green-500 hover:bg-green-400 p-3 w-full text-white rounded-lg" type="submit">Đăng nhập</button>
         </form>
     )
