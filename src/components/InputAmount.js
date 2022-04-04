@@ -23,7 +23,8 @@ function InputAmount({ styleContainer, amount, onIncrease, onDecrease, onChange,
                         && inputValue <= quantity) {
                         onChange(index = 0, inputValue)
                     }
-                }} />
+                }}
+            />
             <button
                 onClick={onIncrease}
                 className={amount >= quantity ? "px-2 border text-2xl text-gray-300" : "px-2 border text-2xl"}

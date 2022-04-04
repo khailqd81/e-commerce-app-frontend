@@ -2,13 +2,16 @@ import axios from "axios"
 import { useLayoutEffect, useState } from "react"
 import { Link } from "react-router-dom"
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
+// Redux 
+import { useDispatch } from "react-redux"
+import { setProduct } from "../store/features/product/productSlice"
 import "../index.css"
-import { useStore } from "../store"
-import { actions } from "../store"
+// import { useStore } from "../store"
+// import { actions } from "../store"
 import moneyFormatter from "../utils/moneyFormat"
 import { urlFormat } from "../utils/urlFormat"
 function ProductCard({ product, cateUrl }) {
-    const [, dispatch] = useStore();
+    const dispatch = useDispatch()
     const [urlName, setUrlName] = useState("/");
     useLayoutEffect(() => {
         async function getCategory() {
@@ -30,7 +33,7 @@ function ProductCard({ product, cateUrl }) {
 
         }
         getCategory();
-    }, [product.category_id, product.product_name])
+    }, [product.category_id, product.product_name, cateUrl])
 
     // let location = useLocation();
     // if (location.pathname === "/") {
@@ -42,7 +45,7 @@ function ProductCard({ product, cateUrl }) {
         <Link
             to={`${urlName}`}
             className="basis-[100%] sm:basis-[50%] md:basis-[25%] lg:basis-[20%] p-1 text-md "
-            onClick={() => dispatch(actions.setProduct(product))}
+            onClick={() => dispatch(setProduct(product))}
         >
             <div className="rounded px-4 pt-4 pb-6 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-transform bg-white" >
                 <img src={product.image_url} className="h-[200px] mx-auto mb-4" alt={product.product_name} />

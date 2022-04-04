@@ -8,6 +8,7 @@ import isLogin from "../utils/isLogin";
 
 function ListAccount() {
     const [accounts, setAccounts] = useState([]);
+
     useEffect(() => {
         async function getAllAccount() {
             const authorization = await isLogin();
@@ -25,6 +26,7 @@ function ListAccount() {
         }
         getAllAccount()
     }, [])
+
     const handleDeleteUser = async (accId) => {
         if (accId === 100) {
             return;
@@ -44,6 +46,7 @@ function ListAccount() {
             setAccounts(newAccounts);
         }
     }
+
     const handleBlockUser = async (accId, is_blocked) => {
         if (accId === 100) {
             return;
@@ -70,6 +73,7 @@ function ListAccount() {
         }
 
     }
+
     return (
         <div className="my-8 max-w-screen-md mx-auto">
             <table className="w-full">

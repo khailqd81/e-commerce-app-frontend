@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useStore, actions } from "../store";
+// Redux toolkit
+import { useSelector, useDispatch } from "react-redux";
+import { updateCart } from "../store/features/cart/cartSlice";
+//
 import isLogin from "../utils/isLogin";
 import { AiOutlineCheckCircle, AiFillCheckCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
@@ -10,6 +13,9 @@ import InputAmount from "./InputAmount";
 import moneyFormatter from "../utils/moneyFormat";
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
 function ProductDetail() {
+    const dispatch = useDispatch();
+    const productFromStore = useSelector(state => state.product.product);
+    const isUserLogin = useSelector(state => state.account.isLogin);
     const [amount, setAmount] = useState(1);
     const [rating, setRating] = useState(5);
     const [comments, setComments] = useState({
@@ -18,13 +24,12 @@ function ProductDetail() {
     });
     // Số lượng sao từ 1 sao đến 5 sao
     const [starRatings, setStarRatings] = useState([0, 0, 0, 0, 0]);
-    const [state, dispatch] = useStore();
     const [showBox, setShowBox] = useState({
         check: false,
         response: false,
         message: ""
     });
-    const [product, setProduct] = useState(state.product);
+    const [product, setProduct] = useState(productFromStore);
 
     useEffect(() => {
         async function getProductDetail() {
@@ -48,6 +53,7 @@ function ProductDetail() {
                 }
 
                 setStarRatings(starArr);
+                console.log(response.data)
                 setProduct(response.data);
                 setComments({
                     list: response.data.comments.reverse(),
@@ -56,7 +62,7 @@ function ProductDetail() {
             }
         }
         getProductDetail()
-    }, [state.product]);
+    }, [productFromStore]);
 
     useEffect(() => {
         let timerID;
@@ -102,7 +108,7 @@ function ProductDetail() {
                 }
             });
             if (newResponse.status === 200) {
-                dispatch(actions.setProductInCart(newResponse.data.products.length));
+                dispatch(updateCart(newResponse.data.products.length));
                 setShowBox({
                     check: true,
                     response: true,
@@ -158,13 +164,14 @@ function ProductDetail() {
                             quantity={product.quantity}
                         />
                     </div>
-                    <button
-                        className="text-white bg-green-600 hover:bg-green-500 disabled:bg-green-500 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"
-                        onClick={() => handleAddToCart(product.product_id)}
-                        disabled={product.quantity <= 0 ? true : false}
-                    >
-                        Thêm vào giỏ hàng
-                    </button>
+                    {isUserLogin &&
+                        <button
+                            className="text-white bg-green-600 hover:bg-green-500 disabled:bg-green-500 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"
+                            onClick={() => handleAddToCart(product.product_id)}
+                            disabled={product.quantity <= 0 ? true : false}
+                        >
+                            Thêm vào giỏ hàng
+                        </button>}
                     {product.quantity <= 0 && <p className="text-red-500 mt-4">Sản phẩm hiện đang hết hàng</p>}
                 </div>
                 {showBox.check

@@ -22,6 +22,9 @@ async function handleUpload(file) {
                     case 'running':
                         console.log('Upload is running');
                         break;
+
+                    default:
+                        console.log('Default in upload');
                 }
             },
             (error) => {
@@ -42,6 +45,9 @@ async function handleUpload(file) {
                     case 'storage/unknown':
                         // Unknown error occurred, inspect error.serverResponse
                         break;
+
+                    default:
+                        console.log('Default in upload error');
                 }
             },
             () => {

@@ -2,10 +2,14 @@ import axios from "axios";
 import { Outlet } from "react-router-dom";
 import { useLayoutEffect } from "react";
 
-import { useStore, actions } from "./store"
+// import { useStore, actions } from "./store"
+import { useSelector, useDispatch } from "react-redux";
+import { setLogin, setRole } from "./store/features/account/accountSlice";
 import isLogin from "./utils/isLogin";
 function App() {
-  const [state, dispatch] = useStore();
+  // const [state, dispatch] = useStore();
+  const account = useSelector(state => state.account);
+  const dispatch = useDispatch();
   useLayoutEffect(() => {
     async function checkIsLogin() {
       // const accessToken = localStorage.getItem("accessToken");
@@ -42,19 +46,23 @@ function App() {
           }
         });
         if (response.status === 200) {
-          dispatch(actions.setRole(response.data.role));
-          dispatch(actions.setLogin(true));
-          console.log("Role: ", response.data.role)
+          // dispatch(actions.setRole(response.data.role));
+          // dispatch(actions.setLogin(true));
+          dispatch(setLogin(true));
+          dispatch(setRole(response.data.role));
         }
       }
       else {
-        dispatch(actions.setRole(""));
-        dispatch(actions.setLogin(false));
+        // dispatch(actions.setRole(""));
+        // dispatch(actions.setLogin(false));
+        dispatch(setLogin(false));
+        dispatch(setRole(""));
       }
     }
     checkIsLogin();
   }, [dispatch]);
-  console.log("login state: ", state.isLogin);
+  console.log("login state: ", account.isLogin);
+  console.log("role: ", account.role);
   return (
     <div className="font-roboto">
       <Outlet />

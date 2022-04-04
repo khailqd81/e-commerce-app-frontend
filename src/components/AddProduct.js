@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-
+//
 import isLogin from "../utils/isLogin"
-import add_image from "../add-image.png"
 import { handleUpload } from "../utils/firebaseUpload"
+
 function AddProduct() {
+    // Lưu toàn bộ input trong form
     const [inputs, setInputs] = useState({
         image: "",
         product_name: "",
@@ -14,6 +15,7 @@ function AddProduct() {
         image_file: "",
         category_id: 1001,
     });
+    // Nội dung thông báo lỗi cho từng trường trong form
     const [messages, setMessages] = useState({
         image: "",
         product_name: "",
@@ -21,6 +23,7 @@ function AddProduct() {
         price: "",
         quantity: "",
     });
+    // Thông báo trạng thái do backend trả về
     const [globalMessage, setGlobalMessage] = useState({
         success: true,
         message: ""
@@ -39,6 +42,7 @@ function AddProduct() {
         }
         getCategoryList();
     }, [])
+
     const onInputChange = (e, keyName) => {
         if ((e.target.value).trim().length === 0) {
             setMessages(prev => ({
@@ -86,6 +90,7 @@ function AddProduct() {
         }
 
     }
+
     const onInputBlur = (e, keyName) => {
         if ((e.target.value).trim().length === 0) {
             setMessages(prev => ({
@@ -94,15 +99,17 @@ function AddProduct() {
             }))
         }
     }
+
     const onInputFocus = (keyName) => {
         setMessages(prev => ({
             ...prev,
             [keyName]: ""
         }))
     }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(e.target.lastChild);
+        // Tắt nút submit để không bị submit nhiều lần liên tiếp
         e.target.lastChild.disabled = true;
         let check = false;
         let newMessages = {};
@@ -123,8 +130,10 @@ function AddProduct() {
             return;
         }
         const authorization = await isLogin();
+        // Upload lên firebase và nhận về url
         const imageUrl = await handleUpload(inputs.image_file);
         console.log("image: ", imageUrl)
+        // Gửi dữ liệu cho backend để lưu vào db
         const data = JSON.stringify({
             product_name: inputs.product_name,
             description: inputs.description,
@@ -140,6 +149,7 @@ function AddProduct() {
                 authorization,
             }
         })
+
         if (response.status === 200) {
             setGlobalMessage({
                 success: true,
@@ -358,7 +368,8 @@ function AddProduct() {
                     className={globalMessage.success
                         ? "fixed z-20 bg-white border border-green-400 text-green-500 py-8 px-16 top-[50%] shadow-xl rounded"
                         : "fixed z-20 bg-white border border-red-400 text-red-500 py-8 px-16 top-[50%] shadow-xl rounded"}
-                >{globalMessage.message}
+                >
+                    {globalMessage.message}
                 </div>
             }
             <button

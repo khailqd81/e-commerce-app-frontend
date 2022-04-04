@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Provider } from 'react-redux';
+import store from './store/store'
 import './index.css';
 import App from './App';
 import Home from './pages/Home';
@@ -20,21 +22,22 @@ import Statistic from './components/Statistic';
 const arrRoutes = ["dien-thoai", "laptop", "tablet", "dong-ho-thong-minh"];
 ReactDOM.render(
   <React.StrictMode>
-    <TypeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} >
-            <Route exact path="login" element={<UserLogin signin />} />
-            <Route exact path="signup" element={<UserLogin signup />} />
-            {arrRoutes.map((item) => {
-              return (
-                <Route exact path={item} element={<Home />} key={item}>
-                  <Route path=":productid" element={<ProductDetail />} />
-                  <Route index element={<ListProduct />} />
-                </Route>
-              )
-            })}
-            {/* <Route path="dien-thoai" element={<Home />} >
+    <Provider store={store}>
+      <TypeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} >
+              <Route exact path="login" element={<UserLogin signin />} />
+              <Route exact path="signup" element={<UserLogin signup />} />
+              {arrRoutes.map((item) => {
+                return (
+                  <Route exact path={item} element={<Home />} key={item}>
+                    <Route path=":productid" element={<ProductDetail />} />
+                    <Route index element={<ListProduct />} />
+                  </Route>
+                )
+              })}
+              {/* <Route path="dien-thoai" element={<Home />} >
               <Route path=":phoneid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
             </Route>
@@ -50,38 +53,39 @@ ReactDOM.render(
               <Route path=":smartwatchid" element={<ProductDetail />} />
               <Route index element={<ListProduct />} />
             </Route> */}
-            <Route exact path="cart" element={<Home />} >
-              <Route path=":productid" element={<ProductDetail />} />
-              <Route index element={<ProductCart />} />
+              <Route exact path="cart" element={<Home />} >
+                <Route path=":productid" element={<ProductDetail />} />
+                <Route index element={<ProductCart />} />
+              </Route>
+              <Route exact path="search" element={<Home />} >
+                <Route index element={<SearchProducts />} />
+              </Route>
+              <Route exact path="order" element={<Home />} >
+                <Route index element={<Order />} />
+              </Route>
+              <Route exact path="account" element={<Home />} >
+                <Route index element={<UserInfo />} />
+              </Route>
+              <Route exact path="statistic" element={<Home />} >
+                <Route index element={<Statistic />} />
+              </Route>
+              <Route exact path="add-product" element={<Home />} >
+                <Route index element={<AddProduct />} />
+              </Route>
+              <Route exact path="users" element={<Home />} >
+                <Route path=":itemid" element={<ViewUserInfo />} />
+                <Route index element={<ListAccount />} />
+              </Route>
+              {/* <Route index element={<ListProduct />} /> */}
+              <Route path="*" element={<Home />} >
+                <Route path=":itemid" element={<ProductDetail />} />
+                <Route index element={<ListProduct />} />
+              </Route>
             </Route>
-            <Route exact path="search" element={<Home />} >
-              <Route index element={<SearchProducts />} />
-            </Route>
-            <Route exact path="order" element={<Home />} >
-              <Route index element={<Order />} />
-            </Route>
-            <Route exact path="account" element={<Home />} >
-              <Route index element={<UserInfo />} />
-            </Route>
-            <Route exact path="statistic" element={<Home />} >
-              <Route index element={<Statistic />} />
-            </Route>
-            <Route exact path="add-product" element={<Home />} >
-              <Route index element={<AddProduct />} />
-            </Route>
-            <Route exact path="users" element={<Home />} >
-              <Route path=":itemid" element={<ViewUserInfo />} />
-              <Route index element={<ListAccount />} />
-            </Route>
-            {/* <Route index element={<ListProduct />} /> */}
-            <Route path="*" element={<Home />} >
-              <Route path=":itemid" element={<ProductDetail />} />
-              <Route index element={<ListProduct />} />
-            </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </TypeProvider>
+          </Routes>
+        </BrowserRouter>
+      </TypeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

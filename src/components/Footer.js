@@ -12,16 +12,18 @@ function Footer() {
                 <div className="flex flex-col mx-auto">
                     <a href="https://www.facebook.com/profile.php?id=100008103409073" className="flex items-center justify-center my-3 text-sky-600">
                         <GrFacebook size={30} className="mr-4" color="blue" />
-                        <p><span className="hidden md:inline-block">Facebook:</span> Phạm Tiến Khải</p>
+                        <p>
+                            <span className="hidden md:inline-block">Facebook:</span> Phạm Tiến Khải
+                        </p>
                     </a>
                     <a href="mailto:khailqd81@gmail.com" className="flex items-center justify-center my-3 text-sky-600">
                         <FcGoogle size={30} className="mr-4" />
-                        <p href="mailto:khailqd81@gmail.com"><span className="hidden md:inline-block">Google:</span> khailqd81@gmail.com</p>
+                        <p>
+                            <span className="hidden md:inline-block">Google:</span> khailqd81@gmail.com
+                        </p>
                     </a>
                 </div>
-
             </div>
-
         </div>
     )
 }

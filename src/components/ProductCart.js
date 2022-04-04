@@ -1,13 +1,16 @@
-import InputAmount from "./InputAmount"
 import { useState, useEffect } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { AiOutlineCheckCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
-
+// Redux
+import { useDispatch } from "react-redux";
+import { updateCart } from "../store/features/cart/cartSlice";
+//
+import InputAmount from "./InputAmount"
 import isLogin from "../utils/isLogin"
 import moneyFormatter from "../utils/moneyFormat"
-import { useStore, actions } from "../store"
+// import { useStore, actions } from "../store"
 function ProductCart() {
     const [products, setProducts] = useState([]);
     const [showBox, setShowBox] = useState({
@@ -15,7 +18,8 @@ function ProductCart() {
         response: false,
         message: ""
     });
-    const [, dispatch] = useStore();
+    // const [, dispatch] = useStore();
+    const dispatch = useDispatch();
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -141,7 +145,7 @@ function ProductCart() {
             }
         });
         if (response.status === 200) {
-            dispatch(actions.setProductInCart(response.data.products.length))
+            dispatch(updateCart(response.data.products.length))
             setProducts(response.data.products);
         }
     }
@@ -165,7 +169,7 @@ function ProductCart() {
                 }
             })
         if (response.status === 200) {
-            dispatch(actions.setProductInCart(0))
+            dispatch(updateCart(0))
             setProducts([])
             setShowBox({
                 check: true,
