@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
+
 import store from './store/store'
 import './index.css';
 import App from './App';
 import Home from './pages/Home';
 import UserLogin from './pages/UserLogin';
 import reportWebVitals from './reportWebVitals';
-import TypeProvider from './store/TypeProvider';
 import ListProduct from './components/ListProduct';
 import ProductDetail from './components/ProductDetail';
 import ProductCart from './components/ProductCart';
@@ -19,11 +19,12 @@ import UserInfo from './components/UserInfo';
 import AddProduct from './components/AddProduct';
 import ListAccount from './components/ListAccount';
 import Statistic from './components/Statistic';
+
 const arrRoutes = ["dien-thoai", "laptop", "tablet", "dong-ho-thong-minh"];
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <TypeProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} >
@@ -37,22 +38,6 @@ ReactDOM.render(
                   </Route>
                 )
               })}
-              {/* <Route path="dien-thoai" element={<Home />} >
-              <Route path=":phoneid" element={<ProductDetail />} />
-              <Route index element={<ListProduct />} />
-            </Route>
-            <Route path="laptop" element={<Home />} >
-              <Route path=":laptopid" element={<ProductDetail />} />
-              <Route index element={<ListProduct />} />
-            </Route>
-            <Route path="tablet" element={<Home />} >
-              <Route path=":tabletid" element={<ProductDetail />} />
-              <Route index element={<ListProduct />} />
-            </Route>
-            <Route path="dong-ho-thong-minh" element={<Home />} >
-              <Route path=":smartwatchid" element={<ProductDetail />} />
-              <Route index element={<ListProduct />} />
-            </Route> */}
               <Route exact path="cart" element={<Home />} >
                 <Route path=":productid" element={<ProductDetail />} />
                 <Route index element={<ProductCart />} />
@@ -76,7 +61,6 @@ ReactDOM.render(
                 <Route path=":itemid" element={<ViewUserInfo />} />
                 <Route index element={<ListAccount />} />
               </Route>
-              {/* <Route index element={<ListProduct />} /> */}
               <Route path="*" element={<Home />} >
                 <Route path=":itemid" element={<ProductDetail />} />
                 <Route index element={<ListProduct />} />
@@ -84,7 +68,6 @@ ReactDOM.render(
             </Route>
           </Routes>
         </BrowserRouter>
-      </TypeProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

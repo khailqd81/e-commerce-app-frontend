@@ -8,7 +8,6 @@ function Home(props) {
             <Header />
             <Outlet />
             <Footer />
-            {/* <ListProduct categoryName={props.categoryName} /> */}
         </div>
     )
 }
