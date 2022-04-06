@@ -1,6 +1,8 @@
 import axios from "axios";
 import { NavLink, Link, useNavigate } from "react-router-dom"
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useCallback } from "react";
+import ReactLoading, { balls } from 'react-loading';
+import { debounce } from "lodash"
 import { SiAzurefunctions } from "react-icons/si";
 import { VscAccount } from "react-icons/vsc";
 import { BsSearch } from "react-icons/bs";
@@ -22,6 +24,7 @@ import isLogin from "../utils/isLogin";
 function Header() {
     const productInCart = useSelector(state => state.cart.value);
     const account = useSelector(state => state.account);
+    const [isLoadingSearch, setIsLoadingSearch] = useState(true);
     const dispatch = useDispatch();
     const [searchProducts, setSearchProducts] = useState([]);
     const [username, setUsername] = useState("username");
@@ -67,41 +70,47 @@ function Header() {
         }
         getUserInfo();
     }, [])
+    async function getSearchData(search) {
+        if (search.trim().length !== 0) {
+            setIsLoadingSearch(true);
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/products/search`, {
+                params: {
+                    productName: search
+                }
+            })
+            const products = response.data;
+            if (products.length !== 0) {
+                // newProduct là mảng mới chứa các product mà có thêm trường category_name
+                let newProduct = [];
+
+                let maxCount = 0;
+                for (let product of products) {
+                    maxCount++;
+                    // Tối đa 5 sản phẩm hiển thị ở phần search
+                    if (maxCount > 5) {
+                        break;
+                    }
+                    const category = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
+                    let productLink = "/" + urlFormat(category.data.category_name) + "/" + urlFormat(product.product_name);
+                    newProduct.push({
+                        ...product,
+                        productLink
+                    })
+                }
+                setSearchProducts(newProduct);
+            } else {
+                setSearchProducts(products);
+            }
+            setIsLoadingSearch(false);
+        }
+    }
+    const debounceDropDown = useCallback(debounce((nextValue) => getSearchData(nextValue), 1000), [])
 
     const handleOnSearchChange = async (e) => {
         let search = e.target.value;
         if (search) {
             setSearchInput(search)
-            if (search.trim().length !== 0) {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/products/search`, {
-                    params: {
-                        productName: search
-                    }
-                })
-                const products = response.data;
-                if (products.length !== 0) {
-                    // newProduct là mảng mới chứa các product mà có thêm trường category_name
-                    let newProduct = [];
-
-                    let maxCount = 0;
-                    for (let product of products) {
-                        maxCount++;
-                        // Tối đa 5 sản phẩm hiển thị ở phần search
-                        if (maxCount > 5) {
-                            break;
-                        }
-                        const category = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/id/${product.category_id}`);
-                        let productLink = "/" + urlFormat(category.data.category_name) + "/" + urlFormat(product.product_name);
-                        newProduct.push({
-                            ...product,
-                            productLink
-                        })
-                    }
-                    setSearchProducts(newProduct);
-                } else {
-                    setSearchProducts(products);
-                }
-            }
+            debounceDropDown(search);
         } else {
             setSearchInput("");
             setSearchProducts([]);
@@ -115,7 +124,6 @@ function Header() {
             navigate(navigateStr);
         }
     }
-
     return (
         <div>
             <div className="w-full bg-green-600 md:px-2">
@@ -160,35 +168,44 @@ function Header() {
                         />
                         <BsSearch className={searchInput.length !== 0 ? "text-gray-400 cursor-pointer" : "text-gray-400"} size={20} onClick={handleSearch} />
                         {
-                            searchInput.length !== 0 &&
-                            (searchProducts.length !== 0
-                                ?
-                                <ul className="absolute top-[calc(100%+4px)] left-0 w-full bg-white shadow-xl rounded z-10">
+                            searchInput.length !== 0
+                            &&
+                            (
+                                searchProducts.length !== 0
+                                    ?
+                                    <ul className="absolute top-[calc(100%+4px)] left-0 w-full bg-white shadow-xl rounded z-10">
 
-                                    {
-                                        searchProducts.map((searchProduct) => {
-                                            return (
-                                                <li key={searchProduct.product_id}>
-                                                    <Link
-                                                        to={searchProduct.productLink}
-                                                        className="block text-black px-3 py-2 w-full bg-white hover:bg-gray-200"
-                                                        onClick={() => {
-                                                            //dispatch(actions.setProduct(searchProduct))
-                                                            console.log("search product: ",searchProduct);
-                                                            dispatch(setProduct(searchProduct))
-                                                            setSearchInput("");
-                                                        }}
-                                                    >
-                                                        {searchProduct.product_name}
-                                                    </Link>
-                                                </li>
-                                            )
-                                        })
+                                        {
+                                            searchProducts.map((searchProduct) => {
+                                                return (
+                                                    <li key={searchProduct.product_id}>
+                                                        <Link
+                                                            to={searchProduct.productLink}
+                                                            className="block text-black px-3 py-2 w-full bg-white hover:bg-gray-200"
+                                                            onClick={() => {
+                                                                //dispatch(actions.setProduct(searchProduct))
+                                                                console.log("search product: ", searchProduct);
+                                                                dispatch(setProduct(searchProduct))
+                                                                setSearchInput("");
+                                                            }}
+                                                        >
+                                                            {searchProduct.product_name}
+                                                        </Link>
+                                                    </li>
+                                                )
+                                            })
 
-                                    }
-                                </ul>
-                                :
-                                <div className="absolute top-[calc(100%+4px)] left-0 w-full px-3 py-2 text-center text-red-500 bg-white shadow-xl rounded z-10">Không tìm thấy sản phẩm phù hợp</div>)
+                                        }
+                                    </ul>
+                                    :
+                                    isLoadingSearch
+                                        ? <div className="absolute top-[calc(100%+4px)] left-0 w-full px-3 py-2 text-center bg-white shadow-xl rounded z-10">
+                                            <ReactLoading className="mx-auto" type={"spin"} color={"#ccc"} height={30} width={30} />
+                                        </div>
+                                        : <div className="absolute top-[calc(100%+4px)] left-0 w-full px-3 py-2 text-center text-red-500 bg-white shadow-xl rounded z-10">Không tìm thấy sản phẩm phù hợp</div>
+
+
+                            )
                         }
                     </div>
 

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { AiOutlineCheckCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 // Redux
 import { useDispatch } from "react-redux";
 import { updateCart } from "../store/features/cart/cartSlice";
@@ -18,12 +20,13 @@ function ProductCart() {
         response: false,
         message: ""
     });
-    // const [, dispatch] = useStore();
+    const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
     useEffect(() => {
         async function getCart() {
+            setIsLoading(true);
             const authorization = await isLogin();
             if (authorization === "NotLogin") {
                 return navigate("/", { replace: true });
@@ -62,6 +65,7 @@ function ProductCart() {
             else {
                 setProducts([])
             }
+            setIsLoading(false)
         }
         getCart();
     }, [navigate])
@@ -190,6 +194,17 @@ function ProductCart() {
         return total + parseFloat(product.price * product.amount);
     }, 0);
 
+    if (isLoading) {
+        return (
+            <div className="my-4 h-full max-w-screen-xl px-2 md:px-0 mx-auto">
+                <p className="h-[10vh] mb-4"><Skeleton height={"10vh"} /></p>
+                <div className="h-[40vh]">
+                    <Skeleton height={"10vh"} />
+                    <Skeleton height={"10vh"} />
+                </div>
+            </div>
+        )
+    }
     return (
         <div className="max-w-screen-xl mx-auto mt-8 mb-16">
             {products.length !== 0 ?

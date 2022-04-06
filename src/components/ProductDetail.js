@@ -22,6 +22,7 @@ function ProductDetail() {
         list: [],
         star: 6
     });
+    const [disableBtn, setDisableBtn] = useState(false);
     // Số lượng sao từ 1 sao đến 5 sao
     const [starRatings, setStarRatings] = useState([0, 0, 0, 0, 0]);
     const [showBox, setShowBox] = useState({
@@ -91,6 +92,7 @@ function ProductDetail() {
     }
 
     const handleAddToCart = async (productId) => {
+        setDisableBtn(true);
         const authorization = await isLogin();
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/cart/add`, {
             product_id: product.product_id,
@@ -122,6 +124,7 @@ function ProductDetail() {
                 message: response.data.message
             });
         }
+        setDisableBtn(false);
     }
 
     const handleFilterComment = (star) => {
@@ -166,9 +169,11 @@ function ProductDetail() {
                     </div>
                     {isUserLogin &&
                         <button
-                            className="text-white bg-green-600 hover:bg-green-500 disabled:bg-green-500 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"
+                            className={product.quantity <= 0 
+                                ? "hidden" 
+                                : "text-white bg-green-600 hover:bg-green-500 disabled:bg-green-400 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"}
                             onClick={() => handleAddToCart(product.product_id)}
-                            disabled={product.quantity <= 0 ? true : false}
+                            disabled={disableBtn}
                         >
                             Thêm vào giỏ hàng
                         </button>}

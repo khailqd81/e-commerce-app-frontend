@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom";
 import { BsFillArrowUpCircleFill } from "react-icons/bs"
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 // Redux
 import { useSelector } from "react-redux";
 //
@@ -13,6 +15,7 @@ function ListProduct() {
     const [products, setProducts] = useState([]);
     const [showGoTo, setShowGoTo] = useState(false);
     const [cateUrl, setCateUrl] = useState("dien-thoai");
+    const [isLoading, setIsLoading] = useState(true);
     const location = useLocation();
     let category = useSelector(state => state.category.value);
     // Lấy category theo localStorage
@@ -22,10 +25,12 @@ function ListProduct() {
 
     useEffect(() => {
         async function getAllProducts() {
+            setIsLoading(true)
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/${category}`);
             const data = response.data;
             setCateUrl(urlFormat(category));
             setProducts(data.sort((a, b) => (a.product_name > b.product_name) ? 1 : -1));
+            setIsLoading(false)
         }
         getAllProducts();
     }, [category]);
@@ -48,6 +53,16 @@ function ListProduct() {
 
     if (products.length === 0) {
         listClassName += " justify-center";
+    }
+    if (isLoading) {
+        return (
+            <div className="my-4 h-full max-w-screen-xl px-2 md:px-0 mx-auto">
+                <p className="h-[20vh] mb-4"><Skeleton height={"20vh"} /></p>
+                <div className="h-[40vh]">
+                    <Skeleton height={"40vh"} />
+                </div>
+            </div>
+        )
     }
 
     return (

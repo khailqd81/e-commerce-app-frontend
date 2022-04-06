@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import StarRatings from 'react-star-ratings';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import isLogin from "../utils/isLogin"
 import moneyFormatter from "../utils/moneyFormat";
 function Order() {
@@ -9,9 +11,12 @@ function Order() {
     const [starRating, setStarRating] = useState(0);
     const [content, setContent] = useState("");
     const [refresh, setRefresh] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
     let navigate = useNavigate();
     useEffect(() => {
         async function getOrder() {
+            setIsLoading(true);
             const authorization = await isLogin();
             if (authorization === "NotLogin") {
                 navigate("/", { replace: true });
@@ -27,6 +32,7 @@ function Order() {
                     setOrderDetails(orders.data.orderDetails.reverse());
                 }
             }
+            setIsLoading(false);
         }
         getOrder();
     }, [navigate, refresh])
@@ -58,6 +64,20 @@ function Order() {
         setRefresh(!refresh);
         e.target.style.display = "none";
     }
+
+    if (isLoading) {
+        return (
+            <div className="my-4 h-full max-w-screen-md px-2 md:px-0 mx-auto">
+                <p className="h-[10vh] mb-4"><Skeleton height={"10vh"} /></p>
+                <div className="h-[40vh]">
+                    <Skeleton height={"10vh"} />
+                    <Skeleton height={"10vh"} />
+                    <Skeleton height={"10vh"} />
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="flex flex-col max-w-screen-sm my-8 mx-auto">
             {
