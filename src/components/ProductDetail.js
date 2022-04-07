@@ -1,14 +1,15 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import ReactLoading from 'react-loading';
+import StarRatings from 'react-star-ratings';
 // Redux toolkit
 import { useSelector, useDispatch } from "react-redux";
 import { updateCart } from "../store/features/cart/cartSlice";
 //
-import isLogin from "../utils/isLogin";
 import { AiOutlineCheckCircle, AiFillCheckCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
 import { MdStars } from "react-icons/md"
-import StarRatings from 'react-star-ratings';
+import isLogin from "../utils/isLogin";
 import InputAmount from "./InputAmount";
 import moneyFormatter from "../utils/moneyFormat";
 // import samsung from "../samsung-galaxy-s21-ultra-bac-600x600-1-200x200.jpg"
@@ -16,6 +17,8 @@ function ProductDetail() {
     const dispatch = useDispatch();
     const productFromStore = useSelector(state => state.product.product);
     const isUserLogin = useSelector(state => state.account.isLogin);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingBtn, setIsLoadingBtn] = useState(false);
     const [amount, setAmount] = useState(1);
     const [rating, setRating] = useState(5);
     const [comments, setComments] = useState({
@@ -34,6 +37,7 @@ function ProductDetail() {
 
     useEffect(() => {
         async function getProductDetail() {
+            setIsLoading(true)
             window.scrollTo(0, 0);
             // if (Object.keys(product).length === 0 || product.product_id !== state.product.product_id) {
             const productId = localStorage.getItem("productId");
@@ -54,13 +58,13 @@ function ProductDetail() {
                 }
 
                 setStarRatings(starArr);
-                console.log(response.data)
                 setProduct(response.data);
                 setComments({
                     list: response.data.comments.reverse(),
                     star: 6
                 })
             }
+            setIsLoading(false);
         }
         getProductDetail()
     }, [productFromStore]);
@@ -92,6 +96,7 @@ function ProductDetail() {
     }
 
     const handleAddToCart = async (productId) => {
+        setIsLoadingBtn(true);
         setDisableBtn(true);
         const authorization = await isLogin();
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/cart/add`, {
@@ -125,6 +130,7 @@ function ProductDetail() {
             });
         }
         setDisableBtn(false);
+        setIsLoadingBtn(false);
     }
 
     const handleFilterComment = (star) => {
@@ -142,6 +148,15 @@ function ProductDetail() {
         }
 
     }
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center my-8 min-h-[50vh]">
+                <ReactLoading type={'balls'} color={'rgb(34 197 94)'} height={'10%'} width={'10%'} />
+            </div>
+        )
+    }
+
     return (
         <div className="flex flex-col max-w-screen-xl mx-auto mt-8">
             <div className="flex flex-wrap px-4 py-8 rounded shadow-xl">
@@ -169,13 +184,17 @@ function ProductDetail() {
                     </div>
                     {isUserLogin &&
                         <button
-                            className={product.quantity <= 0 
-                                ? "hidden" 
-                                : "text-white bg-green-600 hover:bg-green-500 disabled:bg-green-400 max-w-[200px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"}
+                            className={product.quantity <= 0
+                                ? "hidden"
+                                : "flex items-center justify-center text-white bg-green-600 hover:bg-green-500 disabled:bg-green-400 max-w-[230px] py-4 px-6 mt-4 md:mt-auto rounded-md outline-none border-none"}
                             onClick={() => handleAddToCart(product.product_id)}
                             disabled={disableBtn}
                         >
-                            Thêm vào giỏ hàng
+                            <span>Thêm vào giỏ hàng</span>
+                            {isLoadingBtn &&
+                                <div className="ml-2 min-w-[20px]">
+                                    <ReactLoading type={'spin'} color={'white'} height={'100%'} width={'100%'} />
+                                </div>}
                         </button>}
                     {product.quantity <= 0 && <p className="text-red-500 mt-4">Sản phẩm hiện đang hết hàng</p>}
                 </div>

@@ -56,7 +56,7 @@ function ListProduct() {
     }
     if (isLoading) {
         return (
-            <div className="my-4 h-full max-w-screen-xl px-2 md:px-0 mx-auto">
+            <div className="my-8 h-full max-w-screen-xl px-2 md:px-0 mx-auto">
                 <p className="h-[20vh] mb-4"><Skeleton height={"20vh"} /></p>
                 <div className="h-[40vh]">
                     <Skeleton height={"40vh"} />

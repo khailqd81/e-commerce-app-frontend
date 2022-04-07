@@ -43,7 +43,7 @@ function ProductCard({ product, cateUrl }) {
 
     return (
         <Link
-            to={`${urlName}`}
+            to={urlName}
             className="basis-[100%] sm:basis-[50%] md:basis-[25%] lg:basis-[20%] p-1 text-md "
             onClick={() => dispatch(setProduct(product))}
         >

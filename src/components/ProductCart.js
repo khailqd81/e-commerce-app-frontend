@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { AiOutlineCheckCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import ReactLoading from 'react-loading';
 // Redux
 import { useDispatch } from "react-redux";
 import { updateCart } from "../store/features/cart/cartSlice";
@@ -21,6 +22,7 @@ function ProductCart() {
         message: ""
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingBtn, setIsLoadingBtn] = useState(false);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -59,7 +61,6 @@ function ProductCart() {
             //     }
             //   }
             if (response.status === 200) {
-                console.log(response.data.products)
                 setProducts(response.data.products);
             }
             else {
@@ -155,6 +156,7 @@ function ProductCart() {
     }
 
     const handleAddOrder = async () => {
+        setIsLoadingBtn(true);
         const productToDb = products.map((product) => {
             return {
                 product_id: product.product_id,
@@ -162,6 +164,7 @@ function ProductCart() {
                 priced: product.price
             }
         })
+
         const authorization = await isLogin();
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/order/add`,
             {
@@ -187,7 +190,7 @@ function ProductCart() {
                 message: response.data.message
             })
         }
-
+        setIsLoadingBtn(false);
     }
 
     const totalPayment = products.length === 0 ? 0 : products.reduce((total, product, index) => {
@@ -205,8 +208,10 @@ function ProductCart() {
             </div>
         )
     }
+
     return (
         <div className="max-w-screen-xl mx-auto mt-8 mb-16">
+
             {products.length !== 0 ?
                 <div className="p-2 lg:p-0">
                     <table className="hidden lg:table w-full shadow-md mb-6">
@@ -234,7 +239,7 @@ function ProductCart() {
                                             <InputAmount
                                                 styleContainer={"flex justify-center"}
                                                 amount={product.amount}
-                                                onIncrease={() => handleIncrease(index)}
+                                                onIncrease={(index) => handleIncrease(index)}
                                                 onDecrease={() => handleDecrease(index)}
                                                 onChange={handleOnInputChange}
                                                 quantity={product.quantity}
@@ -279,14 +284,17 @@ function ProductCart() {
                     </ul>
                     <div className="flex flex-wrap lg:justify-end">
                         <p className="text-lg self-center basis-full lg:basis-auto">Tổng thanh toán: <span className="text-red-500 font-semibold">{moneyFormatter.format(totalPayment)}</span></p>
-                        <button className="border bg-green-500 hover:bg-green-400 px-16 py-2 lg:ml-4 mt-4 lg:mt-0 rounded text-white basis-full lg:basis-auto" onClick={handleAddOrder}>Mua hàng</button>
+                        <button className="flex items-center justify-center border bg-green-500 hover:bg-green-400 px-16 py-2 lg:ml-4 mt-4 lg:mt-0 rounded text-white basis-full lg:basis-auto" onClick={handleAddOrder}>
+                            Mua hàng
+                            {isLoadingBtn && <ReactLoading className="ml-2" type={"spin"} color={"white"} height={20} width={20} />}
+                        </button>
                     </div>
                 </div>
                 : <p className="text-red-500 font-semibold py-4 text-center min-h-[400px]">Không có sản phẩm nào trong giỏ hàng</p>}
 
             {showBox.check ?
                 showBox.response ?
-                    <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
+                    <div className="transition-opacity ease-in duration-300 flex flex-col items-center justify-center px-4 fixed w-[80vw] md-[30vw] h-[30vh] left-2/4 top-2/4 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-2xl shadow-2xl">
                         <AiOutlineCheckCircle size={60} className="text-green-500 text-bold" />
                         <div className="mt-4 text-center text-black text-lg">{showBox.message}</div>
                     </div>

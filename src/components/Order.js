@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import StarRatings from 'react-star-ratings';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import ReactLoading from 'react-loading';
 import isLogin from "../utils/isLogin"
 import moneyFormatter from "../utils/moneyFormat";
 function Order() {
@@ -12,6 +13,8 @@ function Order() {
     const [content, setContent] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingBtn, setIsLoadingBtn] = useState(false);
+    const [disabledBtn, setDisabledBtn] = useState(false);
 
     let navigate = useNavigate();
     useEffect(() => {
@@ -48,6 +51,8 @@ function Order() {
             alert("Vui lòng chọn số sao cho sản phẩm");
             return;
         }
+        setDisabledBtn(true);
+        setIsLoadingBtn(true);
         const authorization = await isLogin();
         await axios.post(`${process.env.REACT_APP_BACKEND_API}/comment/add`, {
             order_id,
@@ -59,6 +64,8 @@ function Order() {
                 authorization
             }
         })
+        setIsLoadingBtn(false);
+        setDisabledBtn(false);
         setStarRating(0);
         setContent("");
         setRefresh(!refresh);
@@ -170,10 +177,15 @@ function Order() {
                                                                 </div>
 
                                                                 <button
-                                                                    className="flex ml-auto text-white bg-green-500 hover:bg-green-600 py-2 px-8 rounded mt-8 max-w-[160px] "
+                                                                    className="flex items-center justify-center ml-auto text-white disabled:bg-green-300 bg-green-600 hover:bg-green-500 py-2 px-8 rounded mt-8 max-w-[200px] "
                                                                     type="submit"
+                                                                    disabled={disabledBtn}
                                                                 >
-                                                                    Gửi đánh giá
+                                                                    <span>Gửi đánh giá</span>
+                                                                    {isLoadingBtn &&
+                                                                        <div className="ml-2 min-w-[20px]">
+                                                                            <ReactLoading type={'spin'} color={'white'} height={'100%'} width={'100%'} />
+                                                                        </div>}
                                                                 </button>
                                                             </form>
                                                         </div>}
