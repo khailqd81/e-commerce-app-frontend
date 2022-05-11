@@ -6,27 +6,27 @@ function Footer() {
             
             <div className="mt-3">
                 <div className="flex flex-col flex-wrap md:justify-between md:flex-row mx-auto">
-                    <a href="https://www.facebook.com/profile.php?id=100008103409073" target="_blank" className="flex flex-wrap items-center justify-center my-3 text-white">
+                    <a href="https://www.facebook.com/profile.php?id=100008103409073" target="_blank" rel="noreferrer" className="flex flex-wrap items-center justify-center my-3 text-white">
                         <div className="rounded-full p-3 border-2 border-green-300 footer-icon">
                             <RiFacebookFill size={40} className="text-green-300" />
                         </div>
-                        <p className="ml-4 mt-2 md:mt-0 basis-full md:basis-auto">
+                        <p className="md:ml-4 mt-2 md:mt-0 basis-full md:basis-auto">
                             Phạm Tiến Khải
                         </p>
                     </a>
-                    <a href="mailto:khailqd81@gmail.com" target="_blank" className="flex flex-wrap items-center justify-center my-3 text-white">
+                    <a href="mailto:khailqd81@gmail.com" target="_blank" rel="noreferrer" className="flex flex-wrap items-center justify-center my-3 text-white">
                         <div className="rounded-full p-3 border-2 border-green-300 footer-icon">
                             <RiGoogleFill size={40} className="text-green-300" />
                         </div>
-                        <p className="ml-4 mt-2 md:mt-0 basis-full md:basis-auto">
+                        <p className="md:ml-4 mt-2 md:mt-0 basis-full md:basis-auto">
                             khailqd81@gmail.com
                         </p>
                     </a>
-                    <a href="https://github.com/khailqd81" target="_blank" className="flex flex-wrap items-center justify-center my-3 text-white">
+                    <a href="https://github.com/khailqd81" target="_blank" rel="noreferrer" className="flex flex-wrap items-center justify-center my-3 text-white">
                         <div className="rounded-full p-3 border-2 border-green-300 footer-icon">
                             <RiGithubFill size={40} className="text-green-300" />
                         </div>
-                        <p className="ml-4 mt-2 md:mt-0 basis-full md:basis-auto">
+                        <p className="md:ml-4 mt-2 md:mt-0 basis-full md:basis-auto">
                             https://github.com/khailqd81
                         </p>
                     </a>

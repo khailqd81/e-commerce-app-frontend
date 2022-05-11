@@ -19,6 +19,7 @@ import UserInfo from './components/UserInfo';
 import AddProduct from './components/AddProduct';
 import ListAccount from './components/ListAccount';
 import Statistic from './components/Statistic';
+import UpdateProduct from './components/UpdateProduct';
 
 const arrRoutes = ["dien-thoai", "laptop", "tablet", "dong-ho-thong-minh"];
 
@@ -56,6 +57,8 @@ ReactDOM.render(
               </Route>
               <Route exact path="add-product" element={<Home />} >
                 <Route index element={<AddProduct />} />
+              </Route><Route exact path="update-product" element={<Home />} >
+                <Route index element={<UpdateProduct />} />
               </Route>
               <Route exact path="users" element={<Home />} >
                 <Route path=":itemid" element={<ViewUserInfo />} />

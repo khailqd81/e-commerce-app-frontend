@@ -144,11 +144,6 @@ function Header() {
                                 e.target.nextElementSibling.classList.remove("flex")
                                 e.target.nextElementSibling.classList.add("hidden")
                             }
-                            // if (e.target.nextElementSibling && e.target.nextElementSibling.classList.contain("hidden")) {
-                            //     e.target.nextElementSibling.style.display = "flex"
-                            // } else if (e.target.nextElementSibling) {
-                            //     e.target.nextElementSibling.style.display = "none"
-                            // }
                         }}
                     />
                     <div
@@ -263,54 +258,60 @@ function Header() {
                 </nav>
             </div>
 
-            <div className="w-full bg-green-400">
-                <div className="flex md:max-w-screen-xl items-center text-white mx-auto">
-                    <ul className="flex flex-wrap w-full">
-                        <li className="basis-2/4 md:basis-auto">
-                            <NavLink
-                                to="/dien-thoai"
-                                onClick={() => { dispatch(setCategory("Điện thoại")) }}
-                                className={({ isActive }) =>
-                                    isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center"}>
-                                <GiSmartphone size={20} />
-                                <span className="ml-1">Điện thoại</span>
-                            </NavLink>
-                        </li>
-                        <li className="basis-2/4 md:basis-auto">
-                            <NavLink
-                                to="/tablet"
-                                onClick={() => { dispatch(setCategory("Tablet")) }}
-                                className={({ isActive }) =>
-                                    isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center"}>
-                                <AiOutlineTablet size={20} />
-                                <span className="ml-1">Tablet</span>
-                            </NavLink>
-                        </li>
-                        <li className="basis-2/4 md:basis-auto">
-                            <NavLink
-                                to="/laptop"
-                                onClick={() => { dispatch(setCategory("Laptop")) }}
-                                className={({ isActive }) =>
-                                    isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center h-full" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center h-full"}>
-                                <AiOutlineLaptop size={20} />
-                                <span className="ml-1">Laptop</span>
-                            </NavLink>
-                        </li>
-                        <li className="basis-2/4 md:basis-auto text-center">
-                            <NavLink
-                                to="/dong-ho-thong-minh"
-                                onClick={() => { dispatch(setCategory("Đồng hồ thông minh")) }}
-                                className={({ isActive }) =>
-                                    isActive ? "flex items-center bg-green-500 p-2 justify-center" : "flex items-center hover:bg-green-500 p-2 justify-center"}>
-                                <BsSmartwatch size={20} />
-                                <span className="ml-1 hidden md:block">Đồng hồ thông minh</span>
-                                <span className="ml-1 md:hidden">Đồng hồ</span>
-                            </NavLink>
-                        </li>
-
-                    </ul>
+            {(account && account.isLogin && account.role === "admin")
+                ?
+                <div className="text-xl w-full bg-green-400 py-4 text-center uppercase text-white font-bold">
+                    Quản lý cửa hàng PaTiKa                              
                 </div>
-            </div>
+                : 
+                (<div className="w-full bg-green-400">
+                    <div className="flex md:max-w-screen-xl items-center text-white mx-auto">
+                        <ul className="flex flex-wrap w-full">
+                            <li className="basis-2/4 md:basis-auto">
+                                <NavLink
+                                    to="/dien-thoai"
+                                    onClick={() => { dispatch(setCategory("Điện thoại")) }}
+                                    className={({ isActive }) =>
+                                        isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center"}>
+                                    <GiSmartphone size={20} />
+                                    <span className="ml-1">Điện thoại</span>
+                                </NavLink>
+                            </li>
+                            <li className="basis-2/4 md:basis-auto">
+                                <NavLink
+                                    to="/tablet"
+                                    onClick={() => { dispatch(setCategory("Tablet")) }}
+                                    className={({ isActive }) =>
+                                        isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center"}>
+                                    <AiOutlineTablet size={20} />
+                                    <span className="ml-1">Tablet</span>
+                                </NavLink>
+                            </li>
+                            <li className="basis-2/4 md:basis-auto">
+                                <NavLink
+                                    to="/laptop"
+                                    onClick={() => { dispatch(setCategory("Laptop")) }}
+                                    className={({ isActive }) =>
+                                        isActive ? "flex items-center md:mr-4 bg-green-500 p-2 justify-center h-full" : "flex items-center md:mr-4 hover:bg-green-500 p-2 justify-center h-full"}>
+                                    <AiOutlineLaptop size={20} />
+                                    <span className="ml-1">Laptop</span>
+                                </NavLink>
+                            </li>
+                            <li className="basis-2/4 md:basis-auto text-center">
+                                <NavLink
+                                    to="/dong-ho-thong-minh"
+                                    onClick={() => { dispatch(setCategory("Đồng hồ thông minh")) }}
+                                    className={({ isActive }) =>
+                                        isActive ? "flex items-center bg-green-500 p-2 justify-center" : "flex items-center hover:bg-green-500 p-2 justify-center"}>
+                                    <BsSmartwatch size={20} />
+                                    <span className="ml-1 hidden md:block">Đồng hồ thông minh</span>
+                                    <span className="ml-1 md:hidden">Đồng hồ</span>
+                                </NavLink>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>)}
 
         </div>
 

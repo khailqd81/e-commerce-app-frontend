@@ -16,12 +16,6 @@ function UserLogin(props) {
     const classStyle = "flex justify-center bg-gray-100" + (isFormLogin ? " h-screen" : " ");
     return (
         <div className={classStyle}>
-            {/* <Link to="/" 
-                onClick={() => { dispatch(actions.setType("Điện thoại")) }} 
-                className="flex items-center cursor-pointer">
-                <SiAzurefunctions size={40} />
-                <p className="text-xl font-bold ml-[8px]">PaTiKa</p>
-            </Link> */}
             {isFormLogin ? <Login onClick={handleSwitch} /> : <Signup onClick={handleSwitch} />}
         </div>
 
