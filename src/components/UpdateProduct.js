@@ -151,7 +151,10 @@ function UpdateProduct() {
             if (property.toString() === "category_id") {
                 continue;
             }
-            console.log("property: ", property)
+            if(!isChangeImg && (property.toString() === "image" || property.toString() === "image_file")) {
+                continue;
+            }
+
             if (inputs[property].length === 0) {
                 newMessages[property] = "Vui lòng không để trống trường này."
                 check = true;
@@ -173,7 +176,9 @@ function UpdateProduct() {
         }
         const authorization = await isLogin();
         // Gửi dữ liệu cho backend để lưu vào db
+        const productId = localStorage.getItem("productId");
         const data = JSON.stringify({
+            product_id: productId,
             product_name: inputs.product_name,
             description: inputs.description,
             price: inputs.price,
@@ -181,8 +186,7 @@ function UpdateProduct() {
             category_id: inputs.category_id,
             image_url: newImageUrl
         })
-
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API}/products/add`, {
+        const response = await axios.patch(`${process.env.REACT_APP_BACKEND_API}/products/update`, {
             data: data
         }, {
             headers: {
@@ -191,20 +195,21 @@ function UpdateProduct() {
         })
 
         if (response.status === 200) {
+            console.log("update produc: ", response.data)
             setGlobalMessage({
                 success: true,
                 message: "Cập nhật sản phẩm thành công."
             });
             setInputs({
                 image: "",
-                product_name: "",
-                description: "",
-                price: "",
-                quantity: "",
-                image_file: "",
+                product_name: response.data.product_name,
+                description:  response.data.description,
+                price:  response.data.price,
+                quantity:  response.data.quantity,
+                image_file:  "",
                 category_id: 1001,
             })
-            setImageUrl("")
+            setImageUrl(response.data.image_url)
         } else {
             setGlobalMessage({
                 success: false,
@@ -219,7 +224,6 @@ function UpdateProduct() {
             })
         }, 4000)
     }
-    console.log("intput: ", inputs);
     return (
         <form
             className="flex flex-col items-center max-w-screen-md mx-auto my-8 border shadow-lg"
@@ -246,7 +250,7 @@ function UpdateProduct() {
                     </div>
                 }
                 <div className="flex items-center mt-6">
-                    <label className="min-w-[200px] text-right mr-4 cursor-pointer" htmlFor="proName">Thêm hình ảnh sản phẩm</label>
+                    <label className="min-w-[200px] text-right mr-4 cursor-pointer" htmlFor="proName">Thay đổi hình ảnh sản phẩm</label>
                     <input
                         id="proName"
                         className="px-4 py-2 outline-none min-w-[500px] cursor-pointer"

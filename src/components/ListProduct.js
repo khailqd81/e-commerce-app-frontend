@@ -16,6 +16,7 @@ import { setCategory } from "../store/features/category/categorySlice"
 import ProductCard from "./ProductCard"
 import SlideShow from "./SlideShow";
 import { urlFormat } from "../utils/urlFormat";
+import isLogin from "../utils/isLogin";
 
 function ListProduct() {
     const [products, setProducts] = useState([]);
@@ -57,6 +58,34 @@ function ListProduct() {
         }
     }, [])
 
+    const handleDeleteProduct = async (product) => {
+        let text = `Bạn muốn xóa sản phẩm ${product.product_name}`
+        if (window.confirm(text) === true) {
+            console.log("delete Ok")
+            setIsLoading(true)
+            product.is_deleted = true;
+            const authorization = await isLogin();
+            console.log("product del: ", product)
+            const data = JSON.stringify({...product})
+            const responseUpdate = await axios.patch(`${process.env.REACT_APP_BACKEND_API}/products/update`, {
+                data: data
+            }, {
+                headers: {
+                    authorization,
+                }
+            })
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_API}/category/${category}`);
+            if (responseUpdate.status === 200 && response.status === 200) {
+                const data = response.data;
+                setCateUrl(urlFormat(category));
+                setProducts(data.sort((a, b) => (a.product_name > b.product_name) ? 1 : -1));
+            }
+        } else {
+            console.log("delete not Ok")
+        }
+        setIsLoading(false)
+
+    }
     let listClassName = `flex flex-wrap max-w-screen-xl mx-auto my-[20px]`;
 
     if (products.length === 0) {
@@ -205,6 +234,7 @@ function ListProduct() {
                                         key={product.product_id}
                                         product={product}
                                         cateUrl={cateUrl}
+                                        handleDeleteProduct={handleDeleteProduct}
                                     />
                                 )
                             })}

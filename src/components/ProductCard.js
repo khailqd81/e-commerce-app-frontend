@@ -10,7 +10,7 @@ import "../index.css"
 // import { actions } from "../store"
 import moneyFormatter from "../utils/moneyFormat"
 import { urlFormat } from "../utils/urlFormat"
-function ProductCard({ product, cateUrl }) {
+function ProductCard({ product, cateUrl, handleDeleteProduct }) {
     const dispatch = useDispatch()
     const account = useSelector(state => state.account);
     const [urlName, setUrlName] = useState("/");
@@ -58,12 +58,7 @@ function ProductCard({ product, cateUrl }) {
                         <div
                             className="block text-md border text-white bg-red-500 p-2 rounded-lg cursor-pointer hover:bg-red-400"
                             onClick={() => {
-                                let text = `Bạn muốn xóa sản phẩm ${product.product_name}`
-                                if (window.confirm(text) === true){
-                                    console.log("delete Ok")
-                                } else {
-                                    console.log("delete not Ok")
-                                }
+                                handleDeleteProduct(product)
                             }}
                         >
                             Xóa
@@ -71,7 +66,7 @@ function ProductCard({ product, cateUrl }) {
                     </div>
 
                     <Link
-                        to={urlName}
+                        to="/update-product"
                         className="p-1 text-md "
                         onClick={() => dispatch(setProduct(product))}
                     >
