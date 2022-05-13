@@ -226,12 +226,12 @@ function UpdateProduct() {
     }
     return (
         <form
-            className="flex flex-col items-center max-w-screen-md mx-auto my-8 border shadow-lg"
+            className="flex flex-col items-center max-w-screen-md mx-auto my-8 p-4 border shadow-lg"
             encType="multipart/form-data"
             onSubmit={handleSubmit}
         >
-            <div className="flex items-center my-4 pb-4 border-b w-full justify-center text-lg font-semibold">
-                Chỉnh sửa sản phẩm trong cửa hàng của bạn
+            <div className="flex flex-wrap items-center my-4 pb-4 border-b md:w-full text-center justify-center text-lg font-semibold">
+               Chỉnh sửa sản phẩm trong cửa hàng của bạn
             </div>
             <div className="flex flex-col items-center my-4">
                 <label htmlFor="proName" className="cursor-pointer flex justify-center">
@@ -249,11 +249,11 @@ function UpdateProduct() {
                         X
                     </div>
                 }
-                <div className="flex items-center mt-6">
-                    <label className="min-w-[200px] text-right mr-4 cursor-pointer" htmlFor="proName">Thay đổi hình ảnh sản phẩm</label>
+                <div className="flex flex-wrap items-center mt-6">
+                    <label className="basis-full md:basis-auto md:min-w-[200px] text-left md:text-right mr-4 cursor-pointer" htmlFor="proName">Thay đổi hình ảnh sản phẩm</label>
                     <input
                         id="proName"
-                        className="px-4 py-2 outline-none min-w-[500px] cursor-pointer"
+                        className="px-4 py-2 outline-none basis-[100%] md:basis-auto md:min-w-[500px] cursor-pointer"
                         type="file"
                         value={inputs.image}
                         accept="image/*"
@@ -284,13 +284,13 @@ function UpdateProduct() {
                 {messages.image && <p className="mt-2 pl-[218px] text-red-400 text-sm w-full">{messages.image}</p>}
 
             </div>
-            <div className="flex flex-col my-4">
-                <div className="flex items-center">
-                    <label className="min-w-[200px] text-right mr-4">Tên sản phẩm</label>
+            <div className="flex flex-col my-4 w-full md:w-auto">
+                <div className="flex flex-wrap items-center ">
+                    <label className="basis-full md:basis-auto md:min-w-[200px] text-left md:text-right mr-4">Tên sản phẩm</label>
                     <input
                         className={messages.product_name
-                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none min-w-[500px]"
-                            : "px-4 py-2 border focus:border-green-500 outline-none min-w-[500px]"}
+                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"
+                            : "px-4 py-2 border focus:border-green-500 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"}
                         placeholder="Nhập tên sản phẩm"
                         type="text"
                         value={inputs.product_name}
@@ -308,13 +308,13 @@ function UpdateProduct() {
 
                 {messages.product_name && <p className="mt-2 pl-[218px] text-red-400 text-sm">{messages.product_name}</p>}
             </div>
-            <div className="flex flex-col my-4">
-                <div className="flex items-center">
-                    <label className="min-w-[200px] text-right mr-4">Mô tả</label>
+            <div className="flex flex-col my-4 w-full md:w-auto">
+                <div className="flex flex-wrap items-center ">
+                    <label className="basis-full md:basis-auto md:min-w-[200px] text-left md:text-right mr-4">Mô tả</label>
                     <textarea
                         className={messages.description
-                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none min-w-[500px]"
-                            : "px-4 py-2 border focus:border-green-500 outline-none min-w-[500px]"}
+                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"
+                            : "px-4 py-2 border focus:border-green-500 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"}
                         placeholder="Nhập mô tả sản phẩm"
                         value={inputs.description}
                         onChange={(e) => {
@@ -332,11 +332,11 @@ function UpdateProduct() {
                 {messages.description && <p className="mt-2 pl-[218px] text-red-400 text-sm">{messages.description}</p>}
 
             </div>
-            <div className="flex flex-col my-4">
-                <div className="flex items-center">
-                    <label className="min-w-[200px] text-right mr-4">Loại</label>
+            <div className="flex flex-col my-4 w-full md:w-auto">
+                <div className="flex flex-wrap items-center ">
+                    <label className="basis-full md:basis-auto md:min-w-[200px] text-left md:text-right mr-4">Loại</label>
                     <select
-                        className="px-4 py-2 border focus:border-green-500 outline-none min-w-[500px]"
+                        className="px-4 py-2 border focus:border-green-500 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"
                         onChange={(e) => {
                             if (e.target.value) {
                                 setInputs(prev => ({
@@ -360,13 +360,13 @@ function UpdateProduct() {
                 </div>
 
             </div>
-            <div className="flex flex-col my-4">
-                <div className="flex items-center">
-                    <label className="min-w-[200px] text-right mr-4">Giá tiền</label>
+            <div className="flex flex-col my-4 w-full md:w-auto">
+                <div className="flex flex-wrap items-center ">
+                    <label className="basis-full md:basis-auto md:min-w-[200px] text-left md:text-right mr-4">Giá tiền</label>
                     <input
                         className={messages.price
-                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none min-w-[500px]"
-                            : "px-4 py-2 border focus:border-green-500 outline-none min-w-[500px]"}
+                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"
+                            : "px-4 py-2 border focus:border-green-500 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"}
                         placeholder="Nhập giá sản phẩm (VNĐ)"
                         type="number"
                         value={inputs.price}
@@ -385,13 +385,13 @@ function UpdateProduct() {
 
 
             </div>
-            <div className="flex flex-col my-4">
-                <div className="flex items-center">
-                    <label className="min-w-[200px] text-right mr-4">Số lượng</label>
+            <div className="flex flex-col my-4 w-full md:w-auto">
+                <div className="flex flex-wrap items-center ">
+                    <label className="basis-full md:basis-auto md:min-w-[200px] text-left md:text-right mr-4">Số lượng</label>
                     <input
                         className={messages.quantity
-                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none min-w-[500px]"
-                            : "px-4 py-2 border focus:border-green-500 outline-none min-w-[500px]"}
+                            ? "px-4 py-2 border border-red-400 focus:border-red-400 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"
+                            : "px-4 py-2 border focus:border-green-500 outline-none basis-[100%] md:basis-auto md:min-w-[500px]"}
                         placeholder="Nhập số lượng sản phẩm"
                         type="number"
                         value={inputs.quantity}
